@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">MyInstagram</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="navigation_home">Home</string>
+    <string name="navigation_search">Search</string>
+    <string name="navigation_upload">Upload</string>
+    <string name="navigation_favorite">Favorite</string>
+    <string name="navigation_profile">Profile</string>
+    <string name="search_fragment_text">hello_search_fragment</string>
 </resources>

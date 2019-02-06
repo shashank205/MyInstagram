@@ -1,32 +1,23 @@
 package com.example.myinstagram;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 
-import com.example.myinstagram.fragment.FragmentType;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ModifyFragment{
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            if(item.getItemId() == R.id.navigation_home) {
-                replaceFragment(FragmentType.HOME);
-                return true;
-            }
-            else if(item.getItemId() == R.id.navigation_search) {
-                replaceFragment(FragmentType.SEARCH);
-                return true;
-            }
-            return false;
-        }
-    };
+            = item -> {
+                if (item.getItemId() == R.id.navigation_home) {
+                    getNewFragment(FragmentFactory.HOME);
+                    return true;
+                } else if (item.getItemId() == R.id.navigation_search) {
+                    getNewFragment(FragmentFactory.SEARCH);
+                    return true;
+                }
+                return false;
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        Fragment homeFragment = FragmentFactory.getFragment(FragmentType.HOME);
+        Fragment homeFragment = FragmentFactory.getFragment(FragmentFactory.HOME);
         if(homeFragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -45,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void replaceFragment(FragmentType fragmentType) {
-        Fragment newFragment = FragmentFactory.getFragment(fragmentType);
+    @Override
+    public void getNewFragment(int fragmentToReplaceWith) {
+        Fragment newFragment = FragmentFactory.getFragment(fragmentToReplaceWith);
         if(newFragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()

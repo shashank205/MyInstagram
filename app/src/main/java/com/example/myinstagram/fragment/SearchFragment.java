@@ -10,6 +10,15 @@ import com.example.myinstagram.R;
 
 public class SearchFragment extends Fragment {
 
+    public static SearchFragment newInstance() {
+
+        Bundle args = new Bundle();
+
+        SearchFragment fragment = new SearchFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public SearchFragment() {
         // Required empty public constructor
     }
@@ -20,5 +29,4 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search, container, false);
     }
-
 }

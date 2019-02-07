@@ -6,10 +6,10 @@
     <string name="navigation_favorite">Favorite</string>
     <string name="navigation_profile">Profile</string>
     <string name="search_fragment_text">hello_search_fragment</string>
-    <string name="user_story_recycler_view">User story recycler view</string>
     <string name="post_image_description">Instagram image</string>
+    <string name="story_image_descrption">Instagram Story</string>
 
-    <string-array name="user_name">
+    <string-array name="post_user_name">
         <item>"@deadofwrite"</item>
         <item>"@inkandfable"</item>
         <item>"@true.living"</item>
@@ -25,11 +25,29 @@
         <item>Own what’s yours, or else others will try to.</item>
     </string-array>
 
-    <array name="post_content">
+    <array name="post_image_resource">
         <item>@drawable/pic1</item>
         <item>@drawable/pic2</item>
         <item>@drawable/pic3</item>
         <item>@drawable/pic4</item>
         <item>@drawable/pic5</item>
+    </array>
+
+    <string-array name="story_user_name">
+        <item>"@loversland"</item>
+        <item>"@thedad"</item>
+        <item>"@nitch"</item>
+        <item>"@wherearetheavocados"</item>
+        <item>"@sincerelyjules"</item>
+        <item>"@babynative"</item>
+    </string-array>
+
+    <array name="story_image_resource">
+        <item>@drawable/img_badminton</item>
+        <item>@drawable/img_baseball</item>
+        <item>@drawable/img_basketball</item>
+        <item>@drawable/img_running</item>
+        <item>@drawable/img_soccer</item>
+        <item>@drawable/img_swimming</item>
     </array>
 </resources>

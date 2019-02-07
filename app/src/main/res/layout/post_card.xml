@@ -2,8 +2,7 @@
 <layout>
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -19,7 +18,7 @@
                 android:id="@+id/postContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/userName"
+                android:layout_below="@+id/userName"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/post_image_description" />
 
@@ -27,7 +26,7 @@
                 android:id="@+id/postDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/postContent"
+                android:layout_below="@+id/postContent"
                 android:padding="8dp" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>

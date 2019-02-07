@@ -39,3 +39,11 @@ i
 9app/src/main/java/com/example/myinstagram/model/User.java,f/c/fc6c82707c4606b019d350aad32375f127bfea12
 @
 app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164
+S
+#.idea/sonarlint/issuestore/index.pb,9/f/9fe84ebb15faf917b7def6236dba604453cc61e0
+u
+Eapp/src/main/java/com/example/myinstagram/adapter/StoriesAdapter.java,8/e/8e5443d8d30a7de357d523dd957ecd23f8d46697
+j
+:app/src/main/java/com/example/myinstagram/model/Story.java,9/8/986dbd0d22191fa7f3426f271b96087b33b7866c
+U
+%app/src/main/res/layout/post_card.xml,7/3/73e5b292bd92878902369cc906791c6a88a58100

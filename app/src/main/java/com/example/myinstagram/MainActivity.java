@@ -1,10 +1,12 @@
 package com.example.myinstagram;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.myinstagram.databinding.ActivityMainBinding;
 import com.example.myinstagram.fragment.HomeFragment;
 import com.example.myinstagram.fragment.SearchFragment;
 
@@ -25,10 +27,9 @@ public class MainActivity extends AppCompatActivity implements ModifyFragment{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        ActivityMainBinding activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        activityMainBinding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         Fragment onCreateFragment = HomeFragment.newInstance();
         getSupportFragmentManager()

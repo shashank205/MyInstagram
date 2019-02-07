@@ -7,6 +7,7 @@
     <string name="navigation_profile">Profile</string>
     <string name="search_fragment_text">hello_search_fragment</string>
     <string name="user_story_recycler_view">User story recycler view</string>
+    <string name="post_image_description">Instagram image</string>
 
     <string-array name="user_name">
         <item>"@deadofwrite"</item>

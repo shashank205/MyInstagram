@@ -36,4 +36,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'    //Gson
     implementation 'com.squareup.okhttp3:okhttp:3.13.0' //OkHttp
     implementation 'com.github.bumptech.glide:glide:4.8.0'  //Glide
+    compileOnly 'org.projectlombok:lombok:1.18.4'   //lombok
+    annotationProcessor 'org.projectlombok:lombok:1.18.4' //lombok
 }

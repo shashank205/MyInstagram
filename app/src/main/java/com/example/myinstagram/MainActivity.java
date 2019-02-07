@@ -5,15 +5,18 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.myinstagram.fragment.HomeFragment;
+import com.example.myinstagram.fragment.SearchFragment;
+
 public class MainActivity extends AppCompatActivity implements ModifyFragment{
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
                 if (item.getItemId() == R.id.navigation_home) {
-                    getNewFragment(FragmentFactory.HOME);
+                    getNewFragment(HomeFragment.newInstance());
                     return true;
                 } else if (item.getItemId() == R.id.navigation_search) {
-                    getNewFragment(FragmentFactory.SEARCH);
+                    getNewFragment(SearchFragment.newInstance());
                     return true;
                 }
                 return false;
@@ -27,23 +30,18 @@ public class MainActivity extends AppCompatActivity implements ModifyFragment{
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        Fragment homeFragment = FragmentFactory.getFragment(FragmentFactory.HOME);
-        if(homeFragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.fragment_container, homeFragment)
-                    .commit();
-        }
+        Fragment onCreateFragment = HomeFragment.newInstance();
+        getSupportFragmentManager()
+            .beginTransaction()
+            .add(R.id.fragment_container, onCreateFragment)
+            .commit();
     }
 
     @Override
-    public void getNewFragment(int fragmentToReplaceWith) {
-        Fragment newFragment = FragmentFactory.getFragment(fragmentToReplaceWith);
-        if(newFragment != null) {
-            getSupportFragmentManager()
+    public void getNewFragment(Fragment fragmentToReplaceWith) {
+        getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, newFragment)
+                    .replace(R.id.fragment_container, fragmentToReplaceWith)
                     .commit();
-        }
     }
 }

@@ -6,4 +6,29 @@
     <string name="navigation_favorite">Favorite</string>
     <string name="navigation_profile">Profile</string>
     <string name="search_fragment_text">hello_search_fragment</string>
+    <string name="user_story_recycler_view">User story recycler view</string>
+
+    <string-array name="user_name">
+        <item>"@deadofwrite"</item>
+        <item>"@inkandfable"</item>
+        <item>"@true.living"</item>
+        <item>"@weworewhat"</item>
+        <item>"@chillhouse"</item>
+    </string-array>
+
+    <string-array name="post_description">
+        <item>Life goes on, with or without you.</item>
+        <item>5’2 my height but my attitude 6’1</item>
+        <item>Don’t Study me. You won’t Graduate!</item>
+        <item>her attitude savage but her heart is gold.</item>
+        <item>Own what’s yours, or else others will try to.</item>
+    </string-array>
+
+    <array name="post_content">
+        <item>@drawable/pic1</item>
+        <item>@drawable/pic2</item>
+        <item>@drawable/pic3</item>
+        <item>@drawable/pic4</item>
+        <item>@drawable/pic5</item>
+    </array>
 </resources>

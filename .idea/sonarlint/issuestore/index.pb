@@ -47,3 +47,5 @@ j
 :app/src/main/java/com/example/myinstagram/model/Story.java,9/8/986dbd0d22191fa7f3426f271b96087b33b7866c
 U
 %app/src/main/res/layout/post_card.xml,7/3/73e5b292bd92878902369cc906791c6a88a58100
+V
+&app/src/main/res/layout/story_card.xml,0/a/0af4eae2a41d6a9293be9ae71061dfd1cb46c282

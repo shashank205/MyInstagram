@@ -1,9 +1,11 @@
 package com.example.myinstagram.fragment;
 
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
@@ -21,14 +23,11 @@ public class SearchFragment extends Fragment {
 
     private List<Integer> gridImageResources;
     private GridsAdapter gridsAdapter;
+    private Context context;
+    private FragmentSearchBinding fragmentSearchBinding;
 
     public static SearchFragment newInstance() {
-
-        Bundle args = new Bundle();
-
-        SearchFragment fragment = new SearchFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new SearchFragment();
     }
 
     public SearchFragment() {
@@ -36,30 +35,48 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.gridImageResources = new ArrayList<>();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        FragmentSearchBinding fragmentSearchBinding = DataBindingUtil
+        this.fragmentSearchBinding = DataBindingUtil
                 .inflate(inflater, R.layout.fragment_search, container, false);
+        return this.fragmentSearchBinding.getRoot();
+    }
 
-        fragmentSearchBinding.searchGridRecyclerView
-                .setLayoutManager(new GridLayoutManager(getContext(), 2));
-        gridImageResources = new ArrayList<>();
-        gridsAdapter = new GridsAdapter(getContext(), gridImageResources);
-        fragmentSearchBinding.searchGridRecyclerView.setAdapter(gridsAdapter);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.fragmentSearchBinding.searchGridRecyclerView
+                .setLayoutManager(new GridLayoutManager(this.context, 2));
+        this.gridsAdapter = new GridsAdapter(this.context, this.gridImageResources);
+        this.fragmentSearchBinding.searchGridRecyclerView.setAdapter(this.gridsAdapter);
+    }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         initializeGridData();
-        return fragmentSearchBinding.getRoot();
     }
 
     private void initializeGridData() {
-        TypedArray gridImage = getResources().obtainTypedArray(R.array.post_image_resource);
+        TypedArray gridImage = context.getResources().obtainTypedArray(R.array.post_image_resource);
 
         for (int i=0; i<gridImage.length(); i++) {
-            gridImageResources.add(gridImage.getResourceId(i ,0));
+            this.gridImageResources.add(gridImage.getResourceId(i ,0));
         }
-        gridsAdapter.notifyDataSetChanged();
+        this.gridsAdapter.notifyDataSetChanged();
         gridImage.recycle();
     }
 }

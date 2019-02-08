@@ -27,18 +27,19 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new PostViewHolder(LayoutInflater.from(context).inflate(R.layout.post_card, viewGroup, false));
+        return new PostViewHolder(
+                LayoutInflater.from(this.context).inflate(R.layout.post_card, viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder postViewHolder, int i) {
-        Post currentPost = postsData.get(i);
+        Post currentPost = this.postsData.get(i);
         postViewHolder.bindTo(currentPost);
     }
 
     @Override
     public int getItemCount() {
-        return postsData.size();
+        return this.postsData.size();
     }
 
     class PostViewHolder extends RecyclerView.ViewHolder {
@@ -47,13 +48,13 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
 
         private PostViewHolder(@NonNull View itemView) {
             super(itemView);
-            postCardBinding = PostCardBinding.bind(itemView);
+            this.postCardBinding = PostCardBinding.bind(itemView);
         }
 
         void bindTo(Post currentPost) {
-            postCardBinding.userName.setText(currentPost.getUser().getName());
-            Glide.with(context).load(currentPost.getContentResource()).into(postCardBinding.postContent);
-            postCardBinding.postDescription.setText(currentPost.getDescription());
+            this.postCardBinding.userName.setText(currentPost.getUser().getName());
+            Glide.with(context).load(currentPost.getContentResource()).into(this.postCardBinding.postContent);
+            this.postCardBinding.postDescription.setText(currentPost.getDescription());
         }
     }
 }

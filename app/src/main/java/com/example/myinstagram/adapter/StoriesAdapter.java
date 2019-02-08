@@ -26,19 +26,20 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
     @NonNull
     @Override
     public StoryViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new StoryViewHolder(LayoutInflater.from(context).inflate(R.layout.story_card, viewGroup, false));
+        return new StoryViewHolder(
+                LayoutInflater.from(this.context).inflate(R.layout.story_card, viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull StoryViewHolder storyViewHolder, int i) {
-        Story currentStory = storiesData.get(i);
+        Story currentStory = this.storiesData.get(i);
         storyViewHolder.bindTo(currentStory);
 
     }
 
     @Override
     public int getItemCount() {
-        return storiesData.size();
+        return this.storiesData.size();
     }
 
     class StoryViewHolder extends RecyclerView.ViewHolder {
@@ -47,12 +48,12 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
 
         StoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            storyCardBinding = StoryCardBinding.bind(itemView);
+            this.storyCardBinding = StoryCardBinding.bind(itemView);
         }
 
         private void bindTo(Story currentStory) {
-            Glide.with(context).load(currentStory.getImageResource()).into(storyCardBinding.storyContent);
-            storyCardBinding.storyUserName.setText(currentStory.getUser().getName());
+            Glide.with(context).load(currentStory.getImageResource()).into(this.storyCardBinding.storyContent);
+            this.storyCardBinding.storyUserName.setText(currentStory.getUser().getName());
 
         }
     }

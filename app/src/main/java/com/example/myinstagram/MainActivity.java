@@ -15,10 +15,10 @@ public class MainActivity extends AppCompatActivity implements ModifyFragment{
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
                 if (item.getItemId() == R.id.navigation_home) {
-                    getNewFragment(HomeFragment.newInstance());
+                    replaceFragment(HomeFragment.newInstance());
                     return true;
                 } else if (item.getItemId() == R.id.navigation_search) {
-                    getNewFragment(SearchFragment.newInstance());
+                    replaceFragment(SearchFragment.newInstance());
                     return true;
                 }
                 return false;
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements ModifyFragment{
     }
 
     @Override
-    public void getNewFragment(Fragment fragmentToReplaceWith) {
+    public void replaceFragment(Fragment fragmentToReplaceWith) {
         getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, fragmentToReplaceWith)

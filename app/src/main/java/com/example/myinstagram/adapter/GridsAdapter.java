@@ -26,18 +26,19 @@ public class GridsAdapter extends RecyclerView.Adapter<GridsAdapter.GridViewHold
     @NonNull
     @Override
     public GridViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new GridViewHolder(LayoutInflater.from(context).inflate(R.layout.grid_card, viewGroup, false));
+        return new GridViewHolder(
+                LayoutInflater.from(this.context).inflate(R.layout.grid_card, viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull GridViewHolder gridViewHolder, int i) {
-        Integer currentGridImageResource = gridImageResources.get(i);
+        Integer currentGridImageResource = this.gridImageResources.get(i);
         gridViewHolder.bindTo(currentGridImageResource);
     }
 
     @Override
     public int getItemCount() {
-        return gridImageResources.size();
+        return this.gridImageResources.size();
     }
 
     class GridViewHolder extends RecyclerView.ViewHolder {
@@ -45,11 +46,11 @@ public class GridsAdapter extends RecyclerView.Adapter<GridsAdapter.GridViewHold
         GridCardBinding gridCardBinding;
         private GridViewHolder(@NonNull View itemView) {
             super(itemView);
-            gridCardBinding = GridCardBinding.bind(itemView);
+            this.gridCardBinding = GridCardBinding.bind(itemView);
         }
 
         private void bindTo(int contentResource) {
-            Glide.with(context).load(contentResource).into(gridCardBinding.searchGridContent);
+            Glide.with(context).load(contentResource).into(this.gridCardBinding.searchGridContent);
         }
     }
 }

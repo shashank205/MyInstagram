@@ -1,9 +1,11 @@
 package com.example.myinstagram.fragment;
 
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -22,10 +24,14 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
+    private Context mContext;
+    
     private List<Post> postsData;
     private List<Story> storiesData;
     private PostsAdapter postsAdapter;
     private StoriesAdapter storiesAdapter;
+
+    FragmentHomeBinding mFragmentHomeBinding;
 
     public static HomeFragment newInstance() {
 
@@ -41,31 +47,49 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.mContext = context;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        postsData = new ArrayList<>();
+        storiesData = new ArrayList<>();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        FragmentHomeBinding fragmentHomeBinding = DataBindingUtil
-                .inflate(inflater, R.layout.fragment_home, container, false);
+        mFragmentHomeBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
+        mFragmentHomeBinding.homePostRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        return mFragmentHomeBinding.getRoot();
+    }
 
-        fragmentHomeBinding.homePostRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        postsData = new ArrayList<>();
-        postsAdapter = new PostsAdapter(getContext(), postsData);
-        fragmentHomeBinding.homePostRecyclerView.setAdapter(postsAdapter);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        postsAdapter = new PostsAdapter(mContext, postsData);
+        mFragmentHomeBinding.homePostRecyclerView.setAdapter(postsAdapter);
 
-        fragmentHomeBinding.homeStoryRecyclerView.setLayoutManager(
-                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        storiesData = new ArrayList<>();
-        storiesAdapter = new StoriesAdapter(getContext(), storiesData);
-        fragmentHomeBinding.homeStoryRecyclerView.setAdapter(storiesAdapter);
+        mFragmentHomeBinding.homeStoryRecyclerView.setLayoutManager(
+                new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+        storiesAdapter = new StoriesAdapter(mContext, storiesData);
+        mFragmentHomeBinding.homeStoryRecyclerView.setAdapter(storiesAdapter);
+    }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         initializePostData();
         initializeStoryData();
-        return fragmentHomeBinding.getRoot();
     }
 
     private void initializePostData() {
-        String[] userName = getResources().getStringArray(R.array.post_user_name);
-        String[] postDescription = getResources().getStringArray(R.array.post_description);
-        TypedArray sportsImageResources = getResources().obtainTypedArray(R.array.post_image_resource);
+        String[] userName = mContext.getResources().getStringArray(R.array.post_user_name);
+        String[] postDescription = mContext.getResources().getStringArray(R.array.post_description);
+        TypedArray sportsImageResources = mContext.getResources().obtainTypedArray(R.array.post_image_resource);
         for(int i=0;i<userName.length;i++){
             postsData.add(new Post(userName[i], sportsImageResources.getResourceId(i, 0), postDescription[i]));
         }
@@ -75,8 +99,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void initializeStoryData() {
-        String[] userName = getResources().getStringArray(R.array.story_user_name);
-        TypedArray storiesImageResource = getResources().obtainTypedArray(R.array.story_image_resource);
+        String[] userName = mContext.getResources().getStringArray(R.array.story_user_name);
+        TypedArray storiesImageResource = mContext.getResources().obtainTypedArray(R.array.story_image_resource);
 
         for (int i=0; i<userName.length; i++) {
             storiesData.add(new Story(userName[i], storiesImageResource.getResourceId(i ,0)));

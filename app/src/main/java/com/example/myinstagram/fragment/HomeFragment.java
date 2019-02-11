@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -76,7 +77,6 @@ public class HomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         initializePostData();
         initializeStoryData();
-        return fragmentHomeBinding.getRoot();
     }
 
     private void initializePostData() {

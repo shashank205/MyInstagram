@@ -16,11 +16,11 @@ import java.util.List;
 public class GridsAdapter extends RecyclerView.Adapter<GridsAdapter.GridViewHolder> {
 
     private Context context;
-    private List<Integer> gridImageResources;
+    private List<String> gridImageURLs;
 
-    public GridsAdapter(Context context, List<Integer> gridImageResources) {
+    public GridsAdapter(Context context, List<String> gridImageURLs) {
         this.context = context;
-        this.gridImageResources = gridImageResources;
+        this.gridImageURLs = gridImageURLs;
     }
 
     @NonNull
@@ -32,13 +32,13 @@ public class GridsAdapter extends RecyclerView.Adapter<GridsAdapter.GridViewHold
 
     @Override
     public void onBindViewHolder(@NonNull GridViewHolder gridViewHolder, int i) {
-        Integer currentGridImageResource = this.gridImageResources.get(i);
-        gridViewHolder.bindTo(currentGridImageResource);
+        String currentGridImageURL = this.gridImageURLs.get(i);
+        gridViewHolder.bindTo(currentGridImageURL);
     }
 
     @Override
     public int getItemCount() {
-        return this.gridImageResources.size();
+        return this.gridImageURLs.size();
     }
 
     class GridViewHolder extends RecyclerView.ViewHolder {
@@ -49,8 +49,8 @@ public class GridsAdapter extends RecyclerView.Adapter<GridsAdapter.GridViewHold
             this.gridCardBinding = GridCardBinding.bind(itemView);
         }
 
-        private void bindTo(int contentResource) {
-            Glide.with(context).load(contentResource).into(this.gridCardBinding.searchGridContent);
+        private void bindTo(String imageURL) {
+            Glide.with(context).load(imageURL).into(this.gridCardBinding.searchGridContent);
         }
     }
 }

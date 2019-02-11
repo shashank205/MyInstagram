@@ -6,15 +6,15 @@ import lombok.Data;
 public class Post {
 
     private User user;
-    private int contentResource;
+    private String imageURL;
     private int likes;
     private String description;
 
-    public Post(String userName, int contentResource, String description) {
+    public Post(String userName, String imageURL, String description) {
         User newUser = new User();
         newUser.setName(userName);
         this.user = newUser;
-        this.contentResource = contentResource;
+        this.imageURL = imageURL;
         this.description = description;
     }
 }

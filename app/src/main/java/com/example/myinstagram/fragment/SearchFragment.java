@@ -1,7 +1,6 @@
 package com.example.myinstagram.fragment;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,11 +16,12 @@ import com.example.myinstagram.adapter.GridsAdapter;
 import com.example.myinstagram.databinding.FragmentSearchBinding;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
 
-    private List<Integer> gridImageResources;
+    private List<String> gridImageURLs;
     private GridsAdapter gridsAdapter;
     private Context context;
     private FragmentSearchBinding fragmentSearchBinding;
@@ -43,7 +43,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.gridImageResources = new ArrayList<>();
+        this.gridImageURLs = new ArrayList<>();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class SearchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.fragmentSearchBinding.searchGridRecyclerView
                 .setLayoutManager(new GridLayoutManager(this.context, 2));
-        this.gridsAdapter = new GridsAdapter(this.context, this.gridImageResources);
+        this.gridsAdapter = new GridsAdapter(this.context, this.gridImageURLs);
         this.fragmentSearchBinding.searchGridRecyclerView.setAdapter(this.gridsAdapter);
     }
 
@@ -71,12 +71,8 @@ public class SearchFragment extends Fragment {
     }
 
     private void initializeGridData() {
-        TypedArray gridImage = context.getResources().obtainTypedArray(R.array.post_image_resource);
-
-        for (int i=0; i<gridImage.length(); i++) {
-            this.gridImageResources.add(gridImage.getResourceId(i ,0));
-        }
+        String[] imageURLs = context.getResources().getStringArray(R.array.post_image_url);
+        Collections.addAll(gridImageURLs, imageURLs);
         this.gridsAdapter.notifyDataSetChanged();
-        gridImage.recycle();
     }
 }

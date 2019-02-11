@@ -52,7 +52,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
         }
 
         private void bindTo(Story currentStory) {
-            Glide.with(context).load(currentStory.getImageResource()).into(this.storyCardBinding.storyContent);
+            Glide.with(context).load(currentStory.getImageURL()).into(this.storyCardBinding.storyContent);
             this.storyCardBinding.storyUserName.setText(currentStory.getUser().getName());
 
         }

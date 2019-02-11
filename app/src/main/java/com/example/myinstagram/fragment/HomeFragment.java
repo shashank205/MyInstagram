@@ -1,7 +1,6 @@
 package com.example.myinstagram.fragment;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -82,25 +81,23 @@ public class HomeFragment extends Fragment {
 
     private void initializePostData() {
         String[] userName = context.getResources().getStringArray(R.array.post_user_name);
-        String[] postDescription = context.getResources().getStringArray(R.array.post_description);
-        TypedArray sportsImageResources = context.getResources().obtainTypedArray(R.array.post_image_resource);
+        String[] description = context.getResources().getStringArray(R.array.post_description);
+        String[] imageURLs = context.getResources().getStringArray(R.array.post_image_url);
+
         for(int i=0;i<userName.length;i++){
-            this.postsData.add(new Post(userName[i], sportsImageResources.getResourceId(i, 0), postDescription[i]));
+            this.postsData.add(new Post(userName[i], imageURLs[i], description[i]));
         }
 
         this.postsAdapter.notifyDataSetChanged();
-        sportsImageResources.recycle();
     }
 
     private void initializeStoryData() {
         String[] userName = context.getResources().getStringArray(R.array.story_user_name);
-        TypedArray storiesImageResource = context.getResources().obtainTypedArray(R.array.story_image_resource);
+        String[] imageURLs = context.getResources().getStringArray(R.array.story_image_url);
 
         for (int i=0; i<userName.length; i++) {
-            this.storiesData.add(new Story(userName[i], storiesImageResource.getResourceId(i ,0)));
+            this.storiesData.add(new Story(userName[i], imageURLs[i]));
         }
         this.storiesAdapter.notifyDataSetChanged();
-        storiesImageResource.recycle();
-
     }
 }

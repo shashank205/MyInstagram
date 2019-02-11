@@ -53,7 +53,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
 
         void bindTo(Post currentPost) {
             this.postCardBinding.userName.setText(currentPost.getUser().getName());
-            Glide.with(context).load(currentPost.getContentResource()).into(this.postCardBinding.postContent);
+            Glide.with(context).load(currentPost.getImageURL()).into(this.postCardBinding.postContent);
             this.postCardBinding.postDescription.setText(currentPost.getDescription());
         }
     }

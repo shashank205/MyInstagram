@@ -1,16 +1,4 @@
 
-m
-=app/src/main/res/drawable-anydpi/ic_favorite_notification.xml,0/a/0abee397eb602fc2dab01b7977e6c95b21845594
-s
-Capp/src/main/res/drawable-anydpi/ic_favorite_notification_black.xml,a/e/aeb836251100bb10d219c486536660714e4231b0
-g
-7app/src/main/res/drawable-anydpi/ic_home_navigation.xml,5/5/550031a03beabfe8cbf25e28b7074942cc15591d
-l
-<app/src/main/res/drawable-anydpi/ic_profile_notification.xml,e/5/e5643027668ccb804aa76a62386cc5ed0ffaff62
-i
-9app/src/main/res/drawable-anydpi/ic_search_navigation.xml,6/1/61e6b954e75914eb1a02351e5c9806f0e0454ba3
-k
-;app/src/main/res/drawable-anydpi/ic_upload_notification.xml,f/7/f7ad50700667cb935936f0fa92e23cb435ce18dc
 T
 $app/src/main/res/menu/navigation.xml,8/0/803afd746779d3928b03ab332cf47ed81d68d2af
 <
@@ -49,3 +37,23 @@ U
 %app/src/main/res/layout/post_card.xml,7/3/73e5b292bd92878902369cc906791c6a88a58100
 V
 &app/src/main/res/layout/story_card.xml,0/a/0af4eae2a41d6a9293be9ae71061dfd1cb46c282
+f
+6app/src/main/res/drawable/ic_favorite_notification.xml,f/9/f95600a4c5c781aa099ad6bc81a67149f7ffe4bf
+`
+0app/src/main/res/drawable/ic_home_navigation.xml,c/e/ce009e68936643ddf0181186b255967cffe8b9ae
+d
+4app/src/main/res/drawable/ic_launcher_background.xml,4/9/49845c622cb06d895975c7b1e3f943e320bce688
+e
+5app/src/main/res/drawable/ic_profile_notification.xml,c/8/c899b326ead319132956021cdb2e2a72239d7d42
+b
+2app/src/main/res/drawable/ic_search_navigation.xml,2/6/2662c72d1f21ef524f7e9fcc38e67597a695cff2
+d
+4app/src/main/res/drawable/ic_upload_notification.xml,9/1/910d89886dbd34598efec0e85722a56fc969ae4a
+U
+%app/src/main/res/layout/grid_card.xml,3/9/39490be4539d9f8d8b66d7a309ddd61e7666b40a
+d
+4app/src/main/res/drawable/ic_launcher_foreground.xml,5/8/587f297f0f0eaa1dcf927b2b5f0bc5430fadf54f
+s
+Capp/src/main/java/com/example/myinstagram/adapter/GridsAdapter.java,1/a/1aa4a3b9172b8086aef3ffcde5ed13b96e7887da
+P
+ app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e

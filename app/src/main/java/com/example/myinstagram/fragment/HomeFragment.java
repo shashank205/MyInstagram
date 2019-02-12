@@ -2,11 +2,14 @@ package com.example.myinstagram.fragment;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +20,13 @@ import com.example.myinstagram.adapter.StoriesAdapter;
 import com.example.myinstagram.databinding.FragmentHomeBinding;
 import com.example.myinstagram.model.Post;
 import com.example.myinstagram.model.Story;
+import com.example.myinstagram.network.FetchPosts;
+import com.example.myinstagram.network.AysncTaskCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements AysncTaskCallBack {
 
     private List<Post> postsData;
     private List<Story> storiesData;
@@ -75,29 +80,38 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initializePostData();
-        initializeStoryData();
-    }
 
-    private void initializePostData() {
-        String[] userName = context.getResources().getStringArray(R.array.post_user_name);
-        String[] description = context.getResources().getStringArray(R.array.post_description);
-        String[] imageURLs = context.getResources().getStringArray(R.array.post_image_url);
-
-        for(int i=0;i<userName.length;i++){
-            this.postsData.add(new Post(userName[i], imageURLs[i], description[i]));
+        ConnectivityManager connectivityManager = null;
+        NetworkInfo networkInfo = null;
+        if(getActivity() != null)
+            connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            networkInfo = connectivityManager.getActiveNetworkInfo();
         }
-
-        this.postsAdapter.notifyDataSetChanged();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            FetchPosts fetchPosts = new FetchPosts(this);
+            fetchPosts.execute();
+        }
+        initializeStoryData();
     }
 
     private void initializeStoryData() {
         String[] userName = context.getResources().getStringArray(R.array.story_user_name);
         String[] imageURLs = context.getResources().getStringArray(R.array.story_image_url);
 
-        for (int i=0; i<userName.length; i++) {
+        for (int i = 0; i < userName.length; i++) {
             this.storiesData.add(new Story(userName[i], imageURLs[i]));
         }
         this.storiesAdapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void updatePosts(List<Post> posts) {
+        this.postsData = posts;
+        for(Post post: posts) {
+            Log.d("For", post.getLocation());
+        }
+        this.postsAdapter.notifyDataSetChanged();
     }
 }

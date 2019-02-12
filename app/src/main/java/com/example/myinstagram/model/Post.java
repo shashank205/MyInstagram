@@ -5,16 +5,23 @@ import lombok.Data;
 @Data
 public class Post {
 
-    private User user;
-    private String imageURL;
+    private Long id;
+    private String caption;
+    private String location;
     private int likes;
-    private String description;
+    private int comments;
+    private String imageUrl;
+    private boolean likeStatus;
+    private User user;
 
-    public Post(String userName, String imageURL, String description) {
-        User newUser = new User();
-        newUser.setName(userName);
-        this.user = newUser;
-        this.imageURL = imageURL;
-        this.description = description;
+    public Post(Post post) {
+        this.id = post.getId();
+        this.caption = post.getCaption();
+        this.location = post.getLocation();
+        this.likes = post.getLikes();
+        this.comments = post.getComments();
+        this.imageUrl = post.getImageUrl();
+        this.likeStatus = post.isLikeStatus();
+        this.user = post.getUser();
     }
 }

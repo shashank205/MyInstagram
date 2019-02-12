@@ -1,0 +1,14 @@
+
+asquid:UselessImportCheck#"1Remove this unused import 'okhttp3.OkHttpClient'.(ì€’Àùÿÿÿÿ8ğŸ¢í-
+\squid:UselessImportCheck$",Remove this unused import 'okhttp3.Request'.(¬ßØÿÿÿÿÿ8ğŸ¢í-
+`squid:UselessImportCheck"0Remove this unused import 'java.io.IOException'.(ªº»Úıÿÿÿÿ8ğŸ¢í-
+]squid:UselessImportCheck""-Remove this unused import 'okhttp3.Callback'.(ÑÜÓùÿÿÿÿ8ğŸ¢í-
+]squid:UselessImportCheck%"-Remove this unused import 'okhttp3.Response'.(Ï‚ñ—øÿÿÿÿ8ğŸ¢í-
+\squid:UselessImportCheck"1Remove this unused import 'com.google.gson.Gson'.(–§8ğŸ¢í-
+¤squid:S1186m"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.( £úùùÿÿÿÿ8®“ïí-
+nsquid:CommentedOutCodeLineh"<This block of commented-out lines of code should be removed.(Œ¦³üÿÿÿÿ8ñÙ¢í-
+rsquid:UselessImportCheck"BRemove this unused import 'com.example.myinstagram.model.GetPost'.(Àğ—ıÿÿÿÿ8ğŸ¢í-
+\squid:UselessImportCheck&"1Remove this unused import 'okhttp3.ResponseBody'.(Õ«ø8ğŸ¢í-
+\squid:UselessImportCheck"1Remove this unused import 'android.os.AsyncTask'.(À»¥—8ğŸ¢í-
+Tsquid:UselessImportCheck!")Remove this unused import 'okhttp3.Call'.(¶Ñ¼Å8ğŸ¢í-
+~squid:S1450,"[Remove the "postsAdapter" field and declare it as a local variable in the relevant methods.(«„Ìúÿÿÿÿ8®“ïí-

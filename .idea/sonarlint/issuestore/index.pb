@@ -57,3 +57,12 @@ s
 Capp/src/main/java/com/example/myinstagram/adapter/GridsAdapter.java,1/a/1aa4a3b9172b8086aef3ffcde5ed13b96e7887da
 P
  app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
+:
+
+.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
+l
+<app/src/main/java/com/example/myinstagram/model/GetPost.java,b/a/ba2604f0ba860f43232f7faed2ed8dcf5397543f
+s
+Capp/src/main/java/com/example/myinstagram/network/TaskCallBack.java,4/7/4791b9cc26ede974a207be1d4908b844ed8918e6
+q
+Aapp/src/main/java/com/example/myinstagram/network/FetchPosts.java,6/d/6dfda5dc70cef89de23b3852f618372fd47ff2dc

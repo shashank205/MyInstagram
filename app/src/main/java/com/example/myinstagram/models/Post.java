@@ -1,4 +1,4 @@
-package com.example.myinstagram.model;
+package com.example.myinstagram.models;
 
 import lombok.Data;
 

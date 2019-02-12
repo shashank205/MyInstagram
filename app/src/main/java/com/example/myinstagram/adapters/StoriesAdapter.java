@@ -1,4 +1,4 @@
-package com.example.myinstagram.adapter;
+package com.example.myinstagram.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.example.myinstagram.R;
 import com.example.myinstagram.databinding.StoryCardBinding;
-import com.example.myinstagram.model.Story;
+import com.example.myinstagram.models.Story;
 
 import java.util.List;
 

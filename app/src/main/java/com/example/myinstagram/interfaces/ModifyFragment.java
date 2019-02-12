@@ -1,4 +1,4 @@
-package com.example.myinstagram;
+package com.example.myinstagram.interfaces;
 
 import android.support.v4.app.Fragment;
 

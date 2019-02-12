@@ -1,4 +1,4 @@
-package com.example.myinstagram.fragment;
+package com.example.myinstagram.fragments;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -15,19 +15,29 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myinstagram.R;
-import com.example.myinstagram.adapter.PostsAdapter;
-import com.example.myinstagram.adapter.StoriesAdapter;
+import com.example.myinstagram.adapters.PostsAdapter;
+import com.example.myinstagram.adapters.StoriesAdapter;
 import com.example.myinstagram.databinding.FragmentHomeBinding;
-import com.example.myinstagram.model.Post;
-import com.example.myinstagram.model.Story;
-import com.example.myinstagram.network.FetchPosts;
-import com.example.myinstagram.network.AysncTaskCallBack;
+import com.example.myinstagram.interfaces.HTTPClient;
+import com.example.myinstagram.interfaces.HttpCallBack;
+import com.example.myinstagram.models.GetPost;
+import com.example.myinstagram.models.Post;
+import com.example.myinstagram.models.Story;
+import com.example.myinstagram.network.HTTPClientFactory;
+import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements AysncTaskCallBack {
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
+public class HomeFragment extends Fragment implements HttpCallBack {
+
+    private static final String TAG = HomeFragment.class.getName();
+    private static final String POST_GET_URL = "https://jsonblob.com/api/jsonblob/4074c5dc-2dd1-11e9-8c29-6d3427129fcf";
+    private static final int POST_TO_FETCH = 8;
     private List<Post> postsData;
     private List<Story> storiesData;
     private PostsAdapter postsAdapter;
@@ -89,8 +99,8 @@ public class HomeFragment extends Fragment implements AysncTaskCallBack {
             networkInfo = connectivityManager.getActiveNetworkInfo();
         }
         if (networkInfo != null && networkInfo.isConnected()) {
-            FetchPosts fetchPosts = new FetchPosts(this);
-            fetchPosts.execute();
+            HTTPClient okHTTPUtil = HTTPClientFactory.getOKHTTPUtil();
+            okHTTPUtil.makeHTTPGetRequest(POST_GET_URL, this);
         }
         initializeStoryData();
     }
@@ -106,12 +116,34 @@ public class HomeFragment extends Fragment implements AysncTaskCallBack {
 
     }
 
-    @Override
-    public void updatePosts(List<Post> posts) {
-        this.postsData = posts;
-        for(Post post: posts) {
-            Log.d("For", post.getLocation());
+    private void updatePosts(Post[] allPosts) {
+        int i = 0;
+        for(Post post: allPosts) {
+            this.postsData.add(post);
+            if(++i == POST_TO_FETCH)
+                break;
         }
-        this.postsAdapter.notifyDataSetChanged();
+        if(getActivity() != null) {
+            getActivity().runOnUiThread(() -> postsAdapter.notifyDataSetChanged());
+        }
+    }
+
+    @Override
+    public void onFailure(Response response, Throwable throwable, String message) {
+        if(throwable != null) {
+            Log.e(TAG, message, throwable);
+        }
+    }
+
+    @Override
+    public void onSuccess(ResponseBody responseBody) {
+        try {
+            String apiResponse = responseBody.string();
+            Gson gson = new Gson();
+            GetPost getPost = gson.fromJson(apiResponse, GetPost.class);
+            updatePosts(getPost.getPosts());
+        } catch (IOException e) {
+            Log.e(TAG, "ResponseBody to String conversion failed : ", e);
+        }
     }
 }

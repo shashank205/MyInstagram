@@ -1,4 +1,4 @@
-package com.example.myinstagram.fragment;
+package com.example.myinstagram.fragments;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myinstagram.R;
-import com.example.myinstagram.adapter.GridsAdapter;
+import com.example.myinstagram.adapters.GridsAdapter;
 import com.example.myinstagram.databinding.FragmentSearchBinding;
 
 import java.util.ArrayList;

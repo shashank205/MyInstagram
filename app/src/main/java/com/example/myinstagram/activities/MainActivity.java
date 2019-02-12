@@ -1,4 +1,4 @@
-package com.example.myinstagram;
+package com.example.myinstagram.activities;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -6,11 +6,13 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.myinstagram.interfaces.ModifyFragment;
+import com.example.myinstagram.R;
 import com.example.myinstagram.databinding.ActivityMainBinding;
-import com.example.myinstagram.fragment.HomeFragment;
-import com.example.myinstagram.fragment.SearchFragment;
+import com.example.myinstagram.fragments.HomeFragment;
+import com.example.myinstagram.fragments.SearchFragment;
 
-public class MainActivity extends AppCompatActivity implements ModifyFragment{
+public class MainActivity extends AppCompatActivity implements ModifyFragment {
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {

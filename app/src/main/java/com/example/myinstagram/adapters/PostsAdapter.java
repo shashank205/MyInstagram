@@ -2,6 +2,7 @@ package com.example.myinstagram.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,9 +53,25 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
         }
 
         void bindTo(Post currentPost) {
+            Glide.with(context).load(currentPost.getUser().getAvatarUrl()).into(this.postCardBinding.avatarUrl);
             this.postCardBinding.userName.setText(currentPost.getUser().getName());
-            Glide.with(context).load(currentPost.getImageUrl()).into(this.postCardBinding.postContent);
-            this.postCardBinding.postDescription.setText(currentPost.getCaption());
+            this.postCardBinding.location.setText(currentPost.getLocation());
+            Glide.with(context).load(currentPost.getImageUrl()).into(this.postCardBinding.imageUrl);
+            if(currentPost.isLikeStatus()) {
+                this.postCardBinding.likeIcon.setBackgroundResource(R.drawable.ic_home_navigation);
+            }
+            this.postCardBinding.likes.setText(context.getResources()
+                    .getQuantityString(R.plurals.like, currentPost.getLikes(), currentPost.getLikes()));
+            this.postCardBinding.caption.setText(currentPost.getCaption());
+            this.postCardBinding.comments.setText(context.getResources()
+                    .getQuantityString(R.plurals.comment, currentPost.getComments(), currentPost.getComments()));
+
+            if(currentPost.getLocation().equals("")) {
+                ConstraintLayout.LayoutParams newLayoutParams = (ConstraintLayout.LayoutParams) this.postCardBinding.userName.getLayoutParams();
+                float dpFactor = context.getResources().getDisplayMetrics().density;
+                newLayoutParams.topMargin = (int)(24 * dpFactor);
+                this.postCardBinding.userName.setLayoutParams(newLayoutParams);
+            }
         }
     }
 }

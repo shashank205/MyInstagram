@@ -8,6 +8,20 @@
     <string name="search_fragment_text">hello_search_fragment</string>
     <string name="post_image_description">Instagram image</string>
     <string name="story_image_descrption">Instagram Story</string>
+    <string name="avatar_url">Avatar URL</string>
+    <string name="post_like_icon">Post\'s like icon</string>
+    <string name="post_unknown_icon">Post\'s unknown icon</string>
+    <string name="post_share_icon">Post\'s share icon</string>
+    <string name="post_comment_icon">Post\'s comment icon</string>
+
+    <plurals name="like">
+        <item quantity="one">%d like</item>
+        <item quantity="other">%d likes</item>
+    </plurals>
+    <plurals name="comment">
+        <item quantity="one">View %d comment</item>
+        <item quantity="other">View %d comments</item>
+    </plurals>
 
     <string-array name="post_user_name">
         <item>"@deadofwrite"</item>

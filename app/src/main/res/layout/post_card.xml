@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/avatarUrl"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -28,7 +28,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:textIsSelectable="true"
-            android:textSize="14sp"
+            android:textSize="16sp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -41,6 +41,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="14dp"
             android:textIsSelectable="true"
+            android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@id/imageUrl" />
 
         <ImageView
@@ -75,7 +76,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/post_comment_icon"
-            android:src="@drawable/baseline_favorite_border_black_18"
+            android:src="@drawable/outline_mode_comment_black_18"
             app:layout_constraintLeft_toRightOf="@id/likeIcon"
             app:layout_constraintTop_toBottomOf="@id/imageUrl" />
 
@@ -87,7 +88,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/post_share_icon"
-            android:src="@drawable/baseline_favorite_border_black_18"
+            android:src="@drawable/outline_send_black_18"
             app:layout_constraintLeft_toRightOf="@id/commentIcon"
             app:layout_constraintTop_toBottomOf="@id/imageUrl" />
 
@@ -99,7 +100,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:contentDescription="@string/post_unknown_icon"
-            android:src="@drawable/baseline_favorite_border_black_18"
+            android:src="@drawable/outline_turned_in_not_black_18"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageUrl" />
 
@@ -113,6 +114,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:textIsSelectable="true"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/likeIcon" />
@@ -127,6 +129,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:textIsSelectable="true"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/likes" />
@@ -141,6 +144,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:textIsSelectable="true"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/caption" />

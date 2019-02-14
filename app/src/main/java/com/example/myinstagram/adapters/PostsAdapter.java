@@ -57,14 +57,25 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
             this.postCardBinding.userName.setText(currentPost.getUser().getName());
             this.postCardBinding.location.setText(currentPost.getLocation());
             Glide.with(context).load(currentPost.getImageUrl()).into(this.postCardBinding.imageUrl);
-            if(currentPost.isLikeStatus()) {
-                this.postCardBinding.likeIcon.setBackgroundResource(R.drawable.ic_home_navigation);
-            }
-            this.postCardBinding.likes.setText(context.getResources()
-                    .getQuantityString(R.plurals.like, currentPost.getLikes(), currentPost.getLikes()));
             this.postCardBinding.caption.setText(currentPost.getCaption());
-            this.postCardBinding.comments.setText(context.getResources()
-                    .getQuantityString(R.plurals.comment, currentPost.getComments(), currentPost.getComments()));
+
+            if(currentPost.isLikeStatus()) {
+                this.postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_black_18);
+            }
+
+            if(currentPost.getLikes() == 0) {
+                this.postCardBinding.likes.setVisibility(View.GONE);
+            } else {
+                this.postCardBinding.likes.setText(context.getResources()
+                        .getQuantityString(R.plurals.like, currentPost.getLikes(), currentPost.getLikes()));
+            }
+
+            if(currentPost.getComments() == 0) {
+                this.postCardBinding.comments.setVisibility(View.GONE);
+            } else {
+                this.postCardBinding.comments.setText(context.getResources()
+                        .getQuantityString(R.plurals.comment, currentPost.getComments(), currentPost.getComments()));
+            }
 
             if(currentPost.getLocation().equals("")) {
                 ConstraintLayout.LayoutParams newLayoutParams = (ConstraintLayout.LayoutParams) this.postCardBinding.userName.getLayoutParams();

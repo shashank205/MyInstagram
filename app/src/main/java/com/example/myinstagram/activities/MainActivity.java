@@ -14,12 +14,12 @@ import com.example.myinstagram.fragments.SearchFragment;
 
 public class MainActivity extends AppCompatActivity implements ModifyFragment {
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = item -> {
-                if (item.getItemId() == R.id.navigation_home) {
+    private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener
+            = navigationItemSelected -> {
+                if (navigationItemSelected.getItemId() == R.id.navigation_home) {
                     replaceFragment(HomeFragment.newInstance());
                     return true;
-                } else if (item.getItemId() == R.id.navigation_search) {
+                } else if (navigationItemSelected.getItemId() == R.id.navigation_search) {
                     replaceFragment(SearchFragment.newInstance());
                     return true;
                 }
@@ -31,13 +31,16 @@ public class MainActivity extends AppCompatActivity implements ModifyFragment {
         super.onCreate(savedInstanceState);
 
         ActivityMainBinding activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        activityMainBinding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        activityMainBinding.navigation.setOnNavigationItemSelectedListener(this.onNavigationItemSelectedListener);
+        createFirstFragment(HomeFragment.newInstance());
+    }
 
-        Fragment onCreateFragment = HomeFragment.newInstance();
+    @Override
+    public void createFirstFragment(Fragment firstFragment) {
         getSupportFragmentManager()
-            .beginTransaction()
-            .add(R.id.fragment_container, onCreateFragment)
-            .commit();
+                .beginTransaction()
+                .add(R.id.fragment_container, firstFragment)
+                .commit();
     }
 
     @Override

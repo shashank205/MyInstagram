@@ -38,12 +38,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         if(i == VIEW_TYPE_POST) {
-            View postCardView = LayoutInflater.from(this.context).inflate(R.layout.post_card, viewGroup, false);
+            View postCardView = LayoutInflater
+                    .from(this.context).inflate(R.layout.post_card, viewGroup, false);
             this.adapterPostCardBinding = PostCardBinding.bind(postCardView);
             return new PostViewHolder(postCardView);
         }
         else {
-            View storyRecyclerCardView = LayoutInflater.from(this.context).inflate(R.layout.story_recyler_card, viewGroup, false);
+            View storyRecyclerCardView = LayoutInflater
+                    .from(this.context).inflate(R.layout.story_recyler_card, viewGroup, false);
             StoryRecylerCardBinding.bind(storyRecyclerCardView);
             return new PostViewHolder(storyRecyclerCardView);
         }
@@ -111,16 +113,19 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
 
             float dpFactor = context.getResources().getDisplayMetrics().density;
             if(currentPost.getLocation().equals("")) {
-                ConstraintLayout.LayoutParams newLayoutParams = (ConstraintLayout.LayoutParams) this.postCardBinding.userName.getLayoutParams();
+                ConstraintLayout.LayoutParams newLayoutParams =
+                        (ConstraintLayout.LayoutParams) this.postCardBinding.userName.getLayoutParams();
                 newLayoutParams.topMargin = (int)(24 * dpFactor);
                 this.postCardBinding.userName.setLayoutParams(newLayoutParams);
             } else {
-                ConstraintLayout.LayoutParams newLayoutParams = (ConstraintLayout.LayoutParams) this.postCardBinding.userName.getLayoutParams();
+                ConstraintLayout.LayoutParams newLayoutParams =
+                        (ConstraintLayout.LayoutParams) this.postCardBinding.userName.getLayoutParams();
                 newLayoutParams.topMargin = (int)(14 * dpFactor);
                 this.postCardBinding.userName.setLayoutParams(newLayoutParams);
             }
 
-            this.postCardBinding.likeIcon.setOnClickListener(v -> homeFragment.onLikeIconClick(postCardBinding, currentPost));
+            this.postCardBinding.likeIcon
+                    .setOnClickListener(v -> homeFragment.onLikeIconClick(postCardBinding, currentPost));
         }
     }
 }

@@ -23,7 +23,6 @@ import com.example.myinstagram.databinding.PostCardBinding;
 import com.example.myinstagram.databinding.StoryRecylerCardBinding;
 import com.example.myinstagram.interfaces.HTTPClient;
 import com.example.myinstagram.interfaces.HttpCallBack;
-import com.example.myinstagram.models.GetPost;
 import com.example.myinstagram.models.Post;
 import com.example.myinstagram.models.Story;
 import com.example.myinstagram.network.HTTPClientFactory;
@@ -39,8 +38,6 @@ import okhttp3.ResponseBody;
 public class HomeFragment extends Fragment implements HttpCallBack {
 
     private static final String TAG = HomeFragment.class.getName();
-    private static final String POST_GET_URL = "https://jsonblob.com/api/jsonblob/4074c5dc-2dd1-11e9-8c29-6d3427129fcf";
-    private static final int POST_TO_FETCH = 8;
     private List<Post> postsData;
     private List<Story> storiesData;
     private PostsAdapter postsAdapter;
@@ -91,6 +88,7 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        final String POSTS_GET_URL = "https://jsonblob.com/api/jsonblob/4074c5dc-2dd1-11e9-8c29-6d3427129fcf";
         ConnectivityManager connectivityManager = null;
         NetworkInfo networkInfo = null;
         if(getActivity() != null)
@@ -100,31 +98,7 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         }
         if (networkInfo != null && networkInfo.isConnected()) {
             HTTPClient okHTTPUtil = HTTPClientFactory.getOKHTTPUtil();
-            okHTTPUtil.makeHTTPGetRequest(POST_GET_URL, this);
-        }
-    }
-
-    private void initializeStoryData() {
-        this.storiesData.clear();
-        String[] userName = context.getResources().getStringArray(R.array.story_user_name);
-        String[] imageURLs = context.getResources().getStringArray(R.array.story_image_url);
-
-        for (int i = 0; i < userName.length; i++) {
-            this.storiesData.add(new Story(userName[i], imageURLs[i]));
-        }
-        this.storiesAdapter.notifyDataSetChanged();
-
-    }
-
-    private void updatePosts(Post[] allPosts) {
-        int i = 0;
-        for(Post post: allPosts) {
-            this.postsData.add(post);
-            if(++i == POST_TO_FETCH)
-                break;
-        }
-        if(getActivity() != null) {
-            getActivity().runOnUiThread(() -> postsAdapter.notifyDataSetChanged());
+            okHTTPUtil.makeHTTPGetRequest(POSTS_GET_URL, this);
         }
     }
 
@@ -140,10 +114,23 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         try {
             String apiResponse = responseBody.string();
             Gson gson = new Gson();
-            GetPost getPost = gson.fromJson(apiResponse, GetPost.class);
-            updatePosts(getPost.getPosts());
+            PostJSONMapper postJSONMapper = gson.fromJson(apiResponse, PostJSONMapper.class);
+            updatePosts(postJSONMapper.getPosts());
         } catch (IOException e) {
             Log.e(TAG, "ResponseBody to String conversion failed : ", e);
+        }
+    }
+
+    private void updatePosts(Post[] allPosts) {
+        int i = 0;
+        final int POST_TO_FETCH = 15;
+        for(Post post: allPosts) {
+            this.postsData.add(post);
+            if(++i == POST_TO_FETCH)
+                break;
+        }
+        if(getActivity() != null) {
+            getActivity().runOnUiThread( () -> postsAdapter.notifyDataSetChanged() );
         }
     }
 
@@ -153,6 +140,16 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         this.storiesAdapter = new StoriesAdapter(this.context, this.storiesData);
         storyRecylerCardBinding.storyRecyclerCard.setAdapter(this.storiesAdapter);
         initializeStoryData();
+    }
+
+    private void initializeStoryData() {
+        this.storiesData.clear();
+        String[] userName = context.getResources().getStringArray(R.array.story_user_name);
+        String[] imageURLs = context.getResources().getStringArray(R.array.story_image_url);
+
+        for (int i = 0; i < userName.length; i++) {
+            this.storiesData.add(new Story(userName[i], imageURLs[i]));
+        }
         this.storiesAdapter.notifyDataSetChanged();
     }
 
@@ -160,10 +157,24 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         if(postClicked.isLikeStatus()) {
             postClicked.setLikeStatus(false);
             postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_border_black_18);
+            postClicked.setLikes(postClicked.getLikes() - 1);
+            updateLikeCount(postCardBinding, postClicked.getLikes());
         } else {
             postClicked.setLikeStatus(true);
             postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_black_18);
+            postClicked.setLikes(postClicked.getLikes() + 1);
+            updateLikeCount(postCardBinding, postClicked.getLikes());
         }
-        this.storiesAdapter.notifyDataSetChanged();
+        this.postsAdapter.notifyDataSetChanged();
+    }
+
+    private void updateLikeCount(PostCardBinding postCardBinding, int likeCount) {
+        if(likeCount == 0) {
+            postCardBinding.likes.setVisibility(View.GONE);
+        } else {
+            postCardBinding.likes.setVisibility(View.VISIBLE);
+            postCardBinding.likes.setText(context.getResources()
+                    .getQuantityString(R.plurals.like, likeCount, likeCount));
+        }
     }
 }

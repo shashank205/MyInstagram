@@ -91,6 +91,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
 
             if(currentPost.isLikeStatus()) {
                 this.postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_black_18);
+            } else {
+                this.postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_border_black_18);
             }
 
             if(currentPost.getLikes() == 0) {
@@ -107,12 +109,18 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
                         .getQuantityString(R.plurals.comment, currentPost.getComments(), currentPost.getComments()));
             }
 
+            float dpFactor = context.getResources().getDisplayMetrics().density;
             if(currentPost.getLocation().equals("")) {
                 ConstraintLayout.LayoutParams newLayoutParams = (ConstraintLayout.LayoutParams) this.postCardBinding.userName.getLayoutParams();
-                float dpFactor = context.getResources().getDisplayMetrics().density;
                 newLayoutParams.topMargin = (int)(24 * dpFactor);
                 this.postCardBinding.userName.setLayoutParams(newLayoutParams);
+            } else {
+                ConstraintLayout.LayoutParams newLayoutParams = (ConstraintLayout.LayoutParams) this.postCardBinding.userName.getLayoutParams();
+                newLayoutParams.topMargin = (int)(14 * dpFactor);
+                this.postCardBinding.userName.setLayoutParams(newLayoutParams);
             }
+
+            this.postCardBinding.likeIcon.setOnClickListener(v -> homeFragment.onLikeIconClick(postCardBinding, currentPost));
         }
     }
 }

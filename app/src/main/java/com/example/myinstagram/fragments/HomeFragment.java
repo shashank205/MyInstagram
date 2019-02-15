@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.example.myinstagram.R;
 import com.example.myinstagram.adapters.PostsAdapter;
 import com.example.myinstagram.adapters.StoriesAdapter;
 import com.example.myinstagram.databinding.FragmentHomeBinding;
+import com.example.myinstagram.databinding.PostCardBinding;
 import com.example.myinstagram.databinding.StoryRecylerCardBinding;
 import com.example.myinstagram.interfaces.HTTPClient;
 import com.example.myinstagram.interfaces.HttpCallBack;
@@ -81,6 +83,8 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         this.fragmentHomeBinding.homePostRecyclerView.setLayoutManager(new LinearLayoutManager(this.context));
         this.postsAdapter = new PostsAdapter(this.postsData, this);
         this.fragmentHomeBinding.homePostRecyclerView.setAdapter(this.postsAdapter);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL);
+        this.fragmentHomeBinding.homePostRecyclerView.addItemDecoration(dividerItemDecoration);
     }
 
     @Override
@@ -149,6 +153,17 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         this.storiesAdapter = new StoriesAdapter(this.context, this.storiesData);
         storyRecylerCardBinding.storyRecyclerCard.setAdapter(this.storiesAdapter);
         initializeStoryData();
+        this.storiesAdapter.notifyDataSetChanged();
+    }
+
+    public void onLikeIconClick(PostCardBinding postCardBinding, Post postClicked) {
+        if(postClicked.isLikeStatus()) {
+            postClicked.setLikeStatus(false);
+            postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_border_black_18);
+        } else {
+            postClicked.setLikeStatus(true);
+            postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_black_18);
+        }
         this.storiesAdapter.notifyDataSetChanged();
     }
 }

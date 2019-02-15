@@ -23,18 +23,18 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
         this.storiesData = storiesData;
         this.context = context;
     }
+
     @NonNull
     @Override
     public StoryViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new StoryViewHolder(
-                LayoutInflater.from(this.context).inflate(R.layout.story_card, viewGroup, false));
+        View storyCardView = LayoutInflater.from(this.context).inflate(R.layout.story_card, viewGroup, false);
+        return new StoryViewHolder(storyCardView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull StoryViewHolder storyViewHolder, int i) {
         Story currentStory = this.storiesData.get(i);
-        storyViewHolder.bindTo(currentStory);
-
+        storyViewHolder.populate(currentStory);
     }
 
     @Override
@@ -51,10 +51,9 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
             this.storyCardBinding = StoryCardBinding.bind(itemView);
         }
 
-        private void bindTo(Story currentStory) {
+        private void populate(Story currentStory) {
             Glide.with(context).load(currentStory.getImageURL()).into(this.storyCardBinding.storyContent);
             this.storyCardBinding.storyUserName.setText(currentStory.getUser().getName());
-
         }
     }
 }

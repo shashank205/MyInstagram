@@ -26,14 +26,14 @@ public class GridsAdapter extends RecyclerView.Adapter<GridsAdapter.GridViewHold
     @NonNull
     @Override
     public GridViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new GridViewHolder(
-                LayoutInflater.from(this.context).inflate(R.layout.grid_card, viewGroup, false));
+        View gridCardView = LayoutInflater.from(this.context).inflate(R.layout.grid_card, viewGroup, false);
+        return new GridViewHolder(gridCardView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull GridViewHolder gridViewHolder, int i) {
         String currentGridImageURL = this.gridImageURLs.get(i);
-        gridViewHolder.bindTo(currentGridImageURL);
+        gridViewHolder.populate(currentGridImageURL);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class GridsAdapter extends RecyclerView.Adapter<GridsAdapter.GridViewHold
             this.gridCardBinding = GridCardBinding.bind(itemView);
         }
 
-        private void bindTo(String imageURL) {
+        private void populate(String imageURL) {
             Glide.with(context).load(imageURL).into(this.gridCardBinding.searchGridContent);
         }
     }

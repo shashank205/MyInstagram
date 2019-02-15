@@ -53,10 +53,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder postViewHolder, int i) {
-        if(postViewHolder.getItemViewType() == VIEW_TYPE_POST) {
-            Post currentPost = this.postsData.get(i-1);
-            postViewHolder.bindTo(currentPost);
-        } else {
+        if(postViewHolder.getItemViewType() == VIEW_TYPE_POST  && !this.postsData.isEmpty()) {
+            Post currentPost;
+            if(i < STORY_POSITION) {
+                currentPost = this.postsData.get(i);
+            } else {
+                currentPost = this.postsData.get(i-1);
+            }
+            postViewHolder.populate(currentPost);
+        } else if(postViewHolder.getItemViewType() == VIEW_TYPE_STORY){
             StoryRecylerCardBinding storyRecylerCardBinding = DataBindingUtil.getBinding(postViewHolder.itemView);
             homeFragment.createStoryRecyclerInPostRecycler(storyRecylerCardBinding);
         }
@@ -84,7 +89,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
             this.postCardBinding = adapterPostCardBinding;
         }
 
-        void bindTo(Post currentPost) {
+        void populate(Post currentPost) {
             Glide.with(context).load(currentPost.getUser().getAvatarUrl()).into(this.postCardBinding.avatarUrl);
             this.postCardBinding.userName.setText(currentPost.getUser().getName());
             this.postCardBinding.location.setText(currentPost.getLocation());
@@ -100,6 +105,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
             if(currentPost.getLikes() == 0) {
                 this.postCardBinding.likes.setVisibility(View.GONE);
             } else {
+                this.postCardBinding.likes.setVisibility(View.VISIBLE);
                 this.postCardBinding.likes.setText(context.getResources()
                         .getQuantityString(R.plurals.like, currentPost.getLikes(), currentPost.getLikes()));
             }
@@ -107,6 +113,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
             if(currentPost.getComments() == 0) {
                 this.postCardBinding.comments.setVisibility(View.GONE);
             } else {
+                this.postCardBinding.comments.setVisibility(View.VISIBLE);
                 this.postCardBinding.comments.setText(context.getResources()
                         .getQuantityString(R.plurals.comment, currentPost.getComments(), currentPost.getComments()));
             }

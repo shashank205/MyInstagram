@@ -18,6 +18,7 @@ import com.example.myinstagram.R;
 import com.example.myinstagram.adapters.PostsAdapter;
 import com.example.myinstagram.adapters.StoriesAdapter;
 import com.example.myinstagram.databinding.FragmentHomeBinding;
+import com.example.myinstagram.databinding.StoryRecylerCardBinding;
 import com.example.myinstagram.interfaces.HTTPClient;
 import com.example.myinstagram.interfaces.HttpCallBack;
 import com.example.myinstagram.models.GetPost;
@@ -78,13 +79,8 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.fragmentHomeBinding.homePostRecyclerView.setLayoutManager(new LinearLayoutManager(this.context));
-        this.postsAdapter = new PostsAdapter(this.context, this.postsData);
+        this.postsAdapter = new PostsAdapter(this.postsData, this);
         this.fragmentHomeBinding.homePostRecyclerView.setAdapter(this.postsAdapter);
-
-        this.fragmentHomeBinding.homeStoryRecyclerView.setLayoutManager(
-                new LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false));
-        this.storiesAdapter = new StoriesAdapter(this.context, this.storiesData);
-        this.fragmentHomeBinding.homeStoryRecyclerView.setAdapter(this.storiesAdapter);
     }
 
     @Override
@@ -102,10 +98,10 @@ public class HomeFragment extends Fragment implements HttpCallBack {
             HTTPClient okHTTPUtil = HTTPClientFactory.getOKHTTPUtil();
             okHTTPUtil.makeHTTPGetRequest(POST_GET_URL, this);
         }
-        initializeStoryData();
     }
 
     private void initializeStoryData() {
+        this.storiesData.clear();
         String[] userName = context.getResources().getStringArray(R.array.story_user_name);
         String[] imageURLs = context.getResources().getStringArray(R.array.story_image_url);
 
@@ -145,5 +141,14 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         } catch (IOException e) {
             Log.e(TAG, "ResponseBody to String conversion failed : ", e);
         }
+    }
+
+    public void createStoryRecyclerInPostRecycler(StoryRecylerCardBinding storyRecylerCardBinding) {
+        storyRecylerCardBinding.storyRecyclerCard.setLayoutManager(
+                new LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false));
+        this.storiesAdapter = new StoriesAdapter(this.context, this.storiesData);
+        storyRecylerCardBinding.storyRecyclerCard.setAdapter(this.storiesAdapter);
+        initializeStoryData();
+        this.storiesAdapter.notifyDataSetChanged();
     }
 }

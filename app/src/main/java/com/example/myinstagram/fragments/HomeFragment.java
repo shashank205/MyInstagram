@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -64,6 +65,7 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         super.onCreate(savedInstanceState);
         this.postsData = new ArrayList<>();
         this.storiesData = new ArrayList<>();
+        Realm.init(this.context);
     }
 
     @Override
@@ -87,7 +89,10 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        fetchPostsData();
+    }
 
+    private void fetchPostsData() {
         final String POSTS_GET_URL = "https://jsonblob.com/api/jsonblob/4074c5dc-2dd1-11e9-8c29-6d3427129fcf";
         ConnectivityManager connectivityManager = null;
         NetworkInfo networkInfo = null;

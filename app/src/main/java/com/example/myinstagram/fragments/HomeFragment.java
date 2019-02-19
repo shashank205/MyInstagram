@@ -1,6 +1,7 @@
 package com.example.myinstagram.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -30,20 +31,27 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class HomeFragment extends Fragment implements HttpCallBack {
 
     private static final String TAG = HomeFragment.class.getName();
+    private static final String TIME_STAMP_KEY = "timestamp";
+    private static final String SHARED_PREF_FILE = "com.example.myinstagram";
     private List<Post> postsData;
     private List<Story> storiesData;
     private PostsAdapter postsAdapter;
     private StoriesAdapter storiesAdapter;
     private FragmentHomeBinding fragmentHomeBinding;
+    private Realm realmDefaultInstance;
+    private SharedPreferences sharedPreferences;
     private Context context;
 
     public static HomeFragment newInstance() {
@@ -58,6 +66,8 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+        this.realmDefaultInstance = Realm.getDefaultInstance();
+        this.sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -65,7 +75,6 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         super.onCreate(savedInstanceState);
         this.postsData = new ArrayList<>();
         this.storiesData = new ArrayList<>();
-        Realm.init(this.context);
     }
 
     @Override
@@ -89,10 +98,23 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        fetchPostsData();
+
+        long savedTimestamp = sharedPreferences.getLong(TIME_STAMP_KEY, 0);
+        Date date = new Date();
+        if( date.getTime() >= savedTimestamp ) {
+            fetchPosts();
+        } else {
+            fetchPostsFromDatabase();
+        }
     }
 
-    private void fetchPostsData() {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        realmDefaultInstance.close();
+    }
+
+    private void fetchPosts() {
         final String POSTS_GET_URL = "https://jsonblob.com/api/jsonblob/4074c5dc-2dd1-11e9-8c29-6d3427129fcf";
         ConnectivityManager connectivityManager = null;
         NetworkInfo networkInfo = null;
@@ -105,6 +127,12 @@ public class HomeFragment extends Fragment implements HttpCallBack {
             HTTPClient okHTTPUtil = HTTPClientFactory.getOKHTTPUtil();
             okHTTPUtil.makeHTTPGetRequest(POSTS_GET_URL, this);
         }
+    }
+
+    private void fetchPostsFromDatabase() {
+        RealmResults <Post> realmPosts = realmDefaultInstance.where(Post.class).findAllAsync();
+        this.postsData.addAll(realmPosts);
+        this.postsAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -120,23 +148,25 @@ public class HomeFragment extends Fragment implements HttpCallBack {
             String apiResponse = responseBody.string();
             Gson gson = new Gson();
             PostJSONMapper postJSONMapper = gson.fromJson(apiResponse, PostJSONMapper.class);
-            updatePosts(postJSONMapper.getPosts());
+            savePostsInDatabase(postJSONMapper.getPosts());
+            saveTimestampInSharedPref(postJSONMapper.getTimestamp());
         } catch (IOException e) {
             Log.e(TAG, "ResponseBody to String conversion failed : ", e);
         }
     }
 
-    private void updatePosts(Post[] allPosts) {
-        int i = 0;
-        final int POST_TO_FETCH = 15;
-        for(Post post: allPosts) {
-            this.postsData.add(post);
-            if(++i == POST_TO_FETCH)
-                break;
-        }
-        if(getActivity() != null) {
-            getActivity().runOnUiThread( () -> postsAdapter.notifyDataSetChanged() );
-        }
+    private void savePostsInDatabase(List<Post> postsToSave) {
+        this.realmDefaultInstance.executeTransaction(realm -> {
+            RealmList<Post> postRealmList = new RealmList<>();
+            postRealmList.addAll(postsToSave);
+            realm.insertOrUpdate(postRealmList);
+        });
+    }
+
+    private void saveTimestampInSharedPref(Long timestamp) {
+        SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
+        preferencesEditor.putLong(TIME_STAMP_KEY, timestamp);
+        preferencesEditor.apply();
     }
 
     public void createStoryRecyclerInPostRecycler(StoryRecylerCardBinding storyRecylerCardBinding) {
@@ -149,8 +179,8 @@ public class HomeFragment extends Fragment implements HttpCallBack {
 
     private void initializeStoryData() {
         this.storiesData.clear();
-        String[] userName = context.getResources().getStringArray(R.array.story_user_name);
-        String[] imageURLs = context.getResources().getStringArray(R.array.story_image_url);
+        String[] userName = this.context.getResources().getStringArray(R.array.story_user_name);
+        String[] imageURLs = this.context.getResources().getStringArray(R.array.story_image_url);
 
         for (int i = 0; i < userName.length; i++) {
             this.storiesData.add(new Story(userName[i], imageURLs[i]));
@@ -159,17 +189,19 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     }
 
     public void onLikeIconClick(PostCardBinding postCardBinding, Post postClicked) {
-        if(postClicked.isLikeStatus()) {
-            postClicked.setLikeStatus(false);
-            postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_border_black_18);
-            postClicked.setLikes(postClicked.getLikes() - 1);
-            updateLikeCount(postCardBinding, postClicked.getLikes());
-        } else {
-            postClicked.setLikeStatus(true);
-            postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_black_18);
-            postClicked.setLikes(postClicked.getLikes() + 1);
-            updateLikeCount(postCardBinding, postClicked.getLikes());
-        }
+        this.realmDefaultInstance.executeTransaction(realm -> {
+            if(postClicked.isLikeStatus()) {
+                postClicked.setLikeStatus(false);
+                postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_border_black_18);
+                postClicked.setLikes(postClicked.getLikes() - 1);
+                updateLikeCount(postCardBinding, postClicked.getLikes());
+            } else {
+                postClicked.setLikeStatus(true);
+                postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_black_18);
+                postClicked.setLikes(postClicked.getLikes() + 1);
+                updateLikeCount(postCardBinding, postClicked.getLikes());
+            }
+        });
         this.postsAdapter.notifyDataSetChanged();
     }
 

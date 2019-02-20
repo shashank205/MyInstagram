@@ -50,7 +50,6 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     private PostsAdapter postsAdapter;
     private StoriesAdapter storiesAdapter;
     private FragmentHomeBinding fragmentHomeBinding;
-    private Realm realmDefaultInstance;
     private SharedPreferences sharedPreferences;
     private Context context;
 
@@ -66,7 +65,6 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
-        this.realmDefaultInstance = Realm.getDefaultInstance();
         this.sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE);
     }
 
@@ -102,19 +100,15 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         long savedTimestamp = sharedPreferences.getLong(TIME_STAMP_KEY, 0);
         Date date = new Date();
         if( date.getTime() >= savedTimestamp ) {
-            fetchPosts();
+            Log.d(TAG, "Timestamp expired");
+            fetchPostsFromServer();
         } else {
+            Log.d(TAG, "Timestamp valid");
             fetchPostsFromDatabase();
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        realmDefaultInstance.close();
-    }
-
-    private void fetchPosts() {
+    private void fetchPostsFromServer() {
         final String POSTS_GET_URL = "https://jsonblob.com/api/jsonblob/4074c5dc-2dd1-11e9-8c29-6d3427129fcf";
         ConnectivityManager connectivityManager = null;
         NetworkInfo networkInfo = null;
@@ -130,8 +124,12 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     }
 
     private void fetchPostsFromDatabase() {
-        RealmResults <Post> realmPosts = realmDefaultInstance.where(Post.class).findAllAsync();
-        this.postsData.addAll(realmPosts);
+        this.postsData.clear();
+        Realm realmDefaultInstance = Realm.getDefaultInstance();
+        RealmResults <Post> realmPosts = realmDefaultInstance.where(Post.class).findAll();
+        List<Post> unManagedPosts = realmDefaultInstance.copyFromRealm(realmPosts);
+        this.postsData.addAll(unManagedPosts);
+        realmDefaultInstance.close();
         this.postsAdapter.notifyDataSetChanged();
     }
 
@@ -156,11 +154,17 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     }
 
     private void savePostsInDatabase(List<Post> postsToSave) {
-        this.realmDefaultInstance.executeTransaction(realm -> {
+        Realm realmDefaultInstance = Realm.getDefaultInstance();
+        realmDefaultInstance.executeTransaction(realm -> {
             RealmList<Post> postRealmList = new RealmList<>();
             postRealmList.addAll(postsToSave);
+            this.postsData.addAll(postsToSave);
             realm.insertOrUpdate(postRealmList);
         });
+        realmDefaultInstance.close();
+        if(getActivity() != null) {
+            getActivity().runOnUiThread(() -> this.postsAdapter.notifyDataSetChanged());
+        }
     }
 
     private void saveTimestampInSharedPref(Long timestamp) {
@@ -189,7 +193,8 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     }
 
     public void onLikeIconClick(PostCardBinding postCardBinding, Post postClicked) {
-        this.realmDefaultInstance.executeTransaction(realm -> {
+        Realm realmDefaultInstance = Realm.getDefaultInstance();
+        realmDefaultInstance.executeTransaction(realm -> {
             if(postClicked.isLikeStatus()) {
                 postClicked.setLikeStatus(false);
                 postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_border_black_18);
@@ -201,7 +206,9 @@ public class HomeFragment extends Fragment implements HttpCallBack {
                 postClicked.setLikes(postClicked.getLikes() + 1);
                 updateLikeCount(postCardBinding, postClicked.getLikes());
             }
+            realm.insertOrUpdate(postClicked);
         });
+        realmDefaultInstance.close();
         this.postsAdapter.notifyDataSetChanged();
     }
 

@@ -11,6 +11,14 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+    signingConfigs {
+        release {
+            storeFile file("same-insta.jks")
+            storePassword "shashank"
+            keyAlias "key2"
+            keyPassword "shashank"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -23,6 +31,23 @@ android {
     }
     dataBinding {
         enabled = true
+    }
+    flavorDimensions "default"
+    productFlavors {
+        admin {
+            signingConfig signingConfigs.release
+            resValue "integer", "posts_to_display", "2"
+        }
+        customer {
+            signingConfig signingConfigs.release
+            resValue "integer", "posts_to_display", "5"
+        }
+    }
+    variantFilter { variant ->
+        def names = variant.flavors*.name
+        if (names.contains("customer") && variant.buildType.name == 'release') {
+            setIgnore(true)
+        }
     }
 }
 

@@ -1,7 +1,6 @@
 package com.example.myinstagram.fragments;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -26,6 +25,7 @@ import com.example.myinstagram.interfaces.HTTPClient;
 import com.example.myinstagram.interfaces.HttpCallBack;
 import com.example.myinstagram.models.Post;
 import com.example.myinstagram.models.Story;
+import com.example.myinstagram.storage.SharedPreferencesStorage;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -43,13 +43,12 @@ public class HomeFragment extends Fragment implements HttpCallBack {
 
     private static final String TAG = HomeFragment.class.getName();
     private static final String TIME_STAMP_KEY = "timestamp";
-    private static final String SHARED_PREF_FILE = "com.example.myinstagram";
     private List<Post> postsData;
     private List<Story> storiesData;
     private PostsAdapter postsAdapter;
     private StoriesAdapter storiesAdapter;
     private FragmentHomeBinding fragmentHomeBinding;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferencesStorage sharedPreferencesStorage;
     private Context context;
 
     public static HomeFragment newInstance() {
@@ -64,7 +63,6 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
-        this.sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -72,6 +70,7 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         super.onCreate(savedInstanceState);
         this.postsData = new ArrayList<>();
         this.storiesData = new ArrayList<>();
+        this.sharedPreferencesStorage = new SharedPreferencesStorage(this.context);
     }
 
     @Override
@@ -96,7 +95,7 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        long savedTimestamp = sharedPreferences.getLong(TIME_STAMP_KEY, 0);
+        long savedTimestamp = this.sharedPreferencesStorage.readValue(TIME_STAMP_KEY, (long)0);
         Date date = new Date();
         if( date.getTime() >= savedTimestamp ) {
             Log.d(TAG, "Timestamp expired");
@@ -147,7 +146,7 @@ public class HomeFragment extends Fragment implements HttpCallBack {
             Gson gson = new Gson();
             PostJSONMapper postJSONMapper = gson.fromJson(apiResponse, PostJSONMapper.class);
             savePostsInDatabase(postJSONMapper.getPosts());
-            saveTimestampInSharedPref(postJSONMapper.getTimestamp());
+            this.sharedPreferencesStorage.writeValue(TIME_STAMP_KEY, postJSONMapper.getTimestamp());
         } catch (IOException e) {
             Log.e(TAG, "ResponseBody to String conversion failed : ", e);
         }
@@ -172,12 +171,6 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         if(getActivity() != null) {
             getActivity().runOnUiThread(() -> this.postsAdapter.notifyDataSetChanged());
         }
-    }
-
-    private void saveTimestampInSharedPref(Long timestamp) {
-        SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
-        preferencesEditor.putLong(TIME_STAMP_KEY, timestamp);
-        preferencesEditor.apply();
     }
 
     public void createStoryRecyclerInPostRecycler(StoryRecylerCardBinding storyRecylerCardBinding) {

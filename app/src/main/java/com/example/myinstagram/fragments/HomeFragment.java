@@ -26,7 +26,6 @@ import com.example.myinstagram.interfaces.HTTPClient;
 import com.example.myinstagram.interfaces.HttpCallBack;
 import com.example.myinstagram.models.Post;
 import com.example.myinstagram.models.Story;
-import com.example.myinstagram.network.HTTPClientFactory;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -118,8 +117,9 @@ public class HomeFragment extends Fragment implements HttpCallBack {
             networkInfo = connectivityManager.getActiveNetworkInfo();
         }
         if (networkInfo != null && networkInfo.isConnected()) {
-            HTTPClient okHTTPUtil = HTTPClientFactory.getOKHTTPUtil();
-            okHTTPUtil.makeHTTPGetRequest(POSTS_GET_URL, this);
+            HTTPClientComponent hTTPClientComponent = DaggerHTTPClientComponent.create();
+            HTTPClient httpClient = hTTPClientComponent.getOkHTTP();
+            httpClient.makeHTTPGetRequest(POSTS_GET_URL, this);
         }
     }
 
@@ -156,17 +156,19 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     private void savePostsInDatabase(List<Post> postsToSave) {
         int count = this.context.getResources().getInteger(R.integer.posts_to_display);
         Realm realmDefaultInstance = Realm.getDefaultInstance();
-        realmDefaultInstance.executeTransaction(realm -> {
-            RealmList<Post> postRealmList = new RealmList<>();
-            int i = 0;
-            for(Post post: postsToSave) {
-                this.postsData.add(post);
-                if(++i == count)
-                    break;
-            }
-            realm.insertOrUpdate(postRealmList);
-        });
+        realmDefaultInstance.beginTransaction();
+        RealmList<Post> postRealmList = new RealmList<>();
+        int i = 0;
+        for(Post post: postsToSave) {
+            this.postsData.add(post);
+            if(++i == count)
+                break;
+        }
+        postRealmList.addAll(this.postsData);
+        realmDefaultInstance.insertOrUpdate(postRealmList);
+        realmDefaultInstance.commitTransaction();
         realmDefaultInstance.close();
+
         if(getActivity() != null) {
             getActivity().runOnUiThread(() -> this.postsAdapter.notifyDataSetChanged());
         }

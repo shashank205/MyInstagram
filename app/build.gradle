@@ -74,4 +74,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.4'   //lombok
     annotationProcessor 'org.projectlombok:lombok:1.18.4' //lombok
     implementation 'de.hdodenhof:circleimageview:3.0.0' //CircleImageView
+    implementation 'com.google.dagger:dagger:2.17'  //Dagger
+    annotationProcessor "com.google.dagger:dagger-compiler:2.17" //Dagger
 }

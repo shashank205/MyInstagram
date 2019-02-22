@@ -19,10 +19,6 @@ public class OkHTTPUtil implements HTTPClient {
 
     private final OkHttpClient client = new OkHttpClient();
 
-    static OkHTTPUtil newInstance() {
-        return new OkHTTPUtil();
-    }
-
     @Override
     public void makeHTTPGetRequest(String url, Fragment fragment) {
 

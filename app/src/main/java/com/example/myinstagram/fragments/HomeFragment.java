@@ -154,11 +154,16 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     }
 
     private void savePostsInDatabase(List<Post> postsToSave) {
+        int count = this.context.getResources().getInteger(R.integer.posts_to_display);
         Realm realmDefaultInstance = Realm.getDefaultInstance();
         realmDefaultInstance.executeTransaction(realm -> {
             RealmList<Post> postRealmList = new RealmList<>();
-            postRealmList.addAll(postsToSave);
-            this.postsData.addAll(postsToSave);
+            int i = 0;
+            for(Post post: postsToSave) {
+                this.postsData.add(post);
+                if(++i == count)
+                    break;
+            }
             realm.insertOrUpdate(postRealmList);
         });
         realmDefaultInstance.close();

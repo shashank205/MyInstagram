@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements ModifyFragment {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         Realm.init(this);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().name("postRealm.realm").build();

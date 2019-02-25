@@ -1,17 +1,16 @@
-package com.example.myinstagram.network;
+package com.example.myinstagram.dependency_injection;
 
 import com.example.myinstagram.interfaces.HTTPClient;
-
-import javax.inject.Named;
+import com.example.myinstagram.network.OkHTTPUtil;
 
 import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class HTTPClientModule {
+class HTTPClientModule {
+
     @Provides
-    @Named("OkHTTP")
-    HTTPClient provideOkHTTPUtil() {
+    HTTPClient getOkHTTP() {
         return new OkHTTPUtil();
     }
 }

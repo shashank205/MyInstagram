@@ -26,7 +26,6 @@ import com.example.myinstagram.interfaces.HttpCallBack;
 import com.example.myinstagram.models.Post;
 import com.example.myinstagram.models.Story;
 import com.example.myinstagram.storage.SharedPreferencesStorage;
-import com.example.myinstagram.storage.SharedPreferencesStorageModule;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -34,6 +33,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
@@ -49,8 +51,11 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     private PostsAdapter postsAdapter;
     private StoriesAdapter storiesAdapter;
     private FragmentHomeBinding fragmentHomeBinding;
-    private SharedPreferencesStorage sharedPreferencesStorage;
     private Context context;
+    @Inject
+    HTTPClient httpClient;
+    @Inject
+    SharedPreferencesStorage sharedPreferencesStorage;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -62,6 +67,7 @@ public class HomeFragment extends Fragment implements HttpCallBack {
 
     @Override
     public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
         this.context = context;
     }
@@ -71,11 +77,6 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         super.onCreate(savedInstanceState);
         this.postsData = new ArrayList<>();
         this.storiesData = new ArrayList<>();
-        this.sharedPreferencesStorage = DaggerSharedPreferencesStorageComponent
-                .builder()
-                .sharedPreferencesStorageModule(new SharedPreferencesStorageModule(this.context))
-                .build()
-                .getSharedPreferencesStorage();
     }
 
     @Override
@@ -121,7 +122,6 @@ public class HomeFragment extends Fragment implements HttpCallBack {
             networkInfo = connectivityManager.getActiveNetworkInfo();
         }
         if (networkInfo != null && networkInfo.isConnected()) {
-            HTTPClient httpClient = DaggerHTTPClientComponent.create().getOkHTTP();
             httpClient.makeHTTPGetRequest(POSTS_GET_URL, this);
         }
     }

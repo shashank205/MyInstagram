@@ -12,9 +12,6 @@ import com.example.myinstagram.databinding.ActivityMainBinding;
 import com.example.myinstagram.fragments.HomeFragment;
 import com.example.myinstagram.fragments.SearchFragment;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-
 public class MainActivity extends AppCompatActivity implements ModifyFragment {
 
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener
@@ -33,9 +30,6 @@ public class MainActivity extends AppCompatActivity implements ModifyFragment {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        Realm.init(this);
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().name("postRealm.realm").build();
-        Realm.setDefaultConfiguration(realmConfiguration);
 
         ActivityMainBinding activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         activityMainBinding.navigation.setOnNavigationItemSelectedListener(this.onNavigationItemSelectedListener);

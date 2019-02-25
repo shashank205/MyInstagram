@@ -26,6 +26,7 @@ import com.example.myinstagram.interfaces.HttpCallBack;
 import com.example.myinstagram.models.Post;
 import com.example.myinstagram.models.Story;
 import com.example.myinstagram.storage.SharedPreferencesStorage;
+import com.example.myinstagram.storage.SharedPreferencesStorageModule;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -70,7 +71,11 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         super.onCreate(savedInstanceState);
         this.postsData = new ArrayList<>();
         this.storiesData = new ArrayList<>();
-        this.sharedPreferencesStorage = new SharedPreferencesStorage(this.context);
+        this.sharedPreferencesStorage = DaggerSharedPreferencesStorageComponent
+                .builder()
+                .sharedPreferencesStorageModule(new SharedPreferencesStorageModule(this.context))
+                .build()
+                .getSharedPreferencesStorage();
     }
 
     @Override
@@ -116,8 +121,7 @@ public class HomeFragment extends Fragment implements HttpCallBack {
             networkInfo = connectivityManager.getActiveNetworkInfo();
         }
         if (networkInfo != null && networkInfo.isConnected()) {
-            HTTPClientComponent hTTPClientComponent = DaggerHTTPClientComponent.create();
-            HTTPClient httpClient = hTTPClientComponent.getOkHTTP();
+            HTTPClient httpClient = DaggerHTTPClientComponent.create().getOkHTTP();
             httpClient.makeHTTPGetRequest(POSTS_GET_URL, this);
         }
     }

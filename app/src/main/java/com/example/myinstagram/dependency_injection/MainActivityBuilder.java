@@ -6,7 +6,7 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 @Module
-interface ActivityBuilder {
+interface MainActivityBuilder {
 
     @ContributesAndroidInjector(modules = {HTTPClientModule.class, SharedPreferencesStorageModule.class})
     HomeFragment bindHomeFragment();

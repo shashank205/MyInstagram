@@ -12,7 +12,17 @@ import com.example.myinstagram.databinding.ActivityMainBinding;
 import com.example.myinstagram.fragments.HomeFragment;
 import com.example.myinstagram.fragments.SearchFragment;
 
-public class MainActivity extends AppCompatActivity implements ModifyFragment {
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
+
+public class MainActivity extends AppCompatActivity implements ModifyFragment, HasSupportFragmentInjector {
+
+    @Inject
+    DispatchingAndroidInjector<Fragment> fragmentDispatchingAndroidInjector;
 
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener
             = navigationItemSelected -> {
@@ -28,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements ModifyFragment {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
 
@@ -50,5 +61,10 @@ public class MainActivity extends AppCompatActivity implements ModifyFragment {
                     .beginTransaction()
                     .replace(R.id.fragment_container, fragmentToReplaceWith)
                     .commit();
+    }
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return fragmentDispatchingAndroidInjector;
     }
 }

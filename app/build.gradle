@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'realm-android'
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -9,11 +9,26 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+    signingConfigs {
+        release {
+            storeFile file("same-insta.jks")
+            storePassword "shashank"
+            keyAlias "key2"
+            keyPassword "shashank"
+        }
     }
     buildTypes {
+        debug {
+            applicationIdSuffix ".dev"
+        }
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            //shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+            proguardFiles 'proguard-rules.pro'
+            proguardFiles 'progurad-rules-glide.pro'
         }
     }
     compileOptions {
@@ -22,6 +37,23 @@ android {
     }
     dataBinding {
         enabled = true
+    }
+    flavorDimensions "default"
+    productFlavors {
+        admin {
+            signingConfig signingConfigs.release
+            resValue "integer", "posts_to_display", "2"
+        }
+        customer {
+            signingConfig signingConfigs.release
+            resValue "integer", "posts_to_display", "5"
+        }
+    }
+    variantFilter { variant ->
+        def names = variant.flavors*.name
+        if (names.contains("customer") && variant.buildType.name == 'release') {
+            setIgnore(true)
+        }
     }
 }
 
@@ -41,4 +73,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0'  //Glide
     compileOnly 'org.projectlombok:lombok:1.18.4'   //lombok
     annotationProcessor 'org.projectlombok:lombok:1.18.4' //lombok
+    implementation 'de.hdodenhof:circleimageview:3.0.0' //CircleImageView
+    implementation 'com.google.dagger:dagger:2.21'  //Dagger
+    annotationProcessor "com.google.dagger:dagger-compiler:2.21" //Dagger
+    implementation 'com.google.dagger:dagger-android-support:2.21'  //Dagger
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.21'   //Dagger
 }

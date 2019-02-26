@@ -8,6 +8,20 @@
     <string name="search_fragment_text">hello_search_fragment</string>
     <string name="post_image_description">Instagram image</string>
     <string name="story_image_descrption">Instagram Story</string>
+    <string name="avatar_url">Avatar URL</string>
+    <string name="post_like_icon">Post\'s like icon</string>
+    <string name="post_unknown_icon">Post\'s unknown icon</string>
+    <string name="post_share_icon">Post\'s share icon</string>
+    <string name="post_comment_icon">Post\'s comment icon</string>
+
+    <plurals name="like">
+        <item quantity="one">%d like</item>
+        <item quantity="other">%d likes</item>
+    </plurals>
+    <plurals name="comment">
+        <item quantity="one">View %d comment</item>
+        <item quantity="other">View %d comments</item>
+    </plurals>
 
     <string-array name="post_user_name">
         <item>"@deadofwrite"</item>
@@ -25,13 +39,13 @@
         <item>Own what’s yours, or else others will try to.</item>
     </string-array>
 
-    <array name="post_image_resource">
-        <item>@drawable/pic1</item>
-        <item>@drawable/pic2</item>
-        <item>@drawable/pic3</item>
-        <item>@drawable/pic4</item>
-        <item>@drawable/pic5</item>
-    </array>
+    <string-array name="post_image_url">
+        <item>https://cdn2-www.superherohype.com/assets/uploads/2019/02/Avengers-Endgame-costumes-featured.jpg</item>
+        <item>https://cdn.guidingtech.com/imager/media/assets/189397/Instagram-DP_7c4a12eb7455b3a1ce1ef1cadcf29289.jpg?1524142437</item>
+        <item>https://wordyboard.com/wp-content/uploads/2018/08/1_tHfNH7iOUJHznZutbllKPg.jpeg</item>
+        <item>https://wordyboard.com/wp-content/uploads/2018/08/luchshye-instagramy-11-1.jpg</item>
+        <item>https://wordyboard.com/wp-content/uploads/2018/08/luchshye-instagramy-11-5.jpg</item>
+    </string-array>
 
     <string-array name="story_user_name">
         <item>"@loversland"</item>
@@ -42,12 +56,12 @@
         <item>"@babynative"</item>
     </string-array>
 
-    <array name="story_image_resource">
-        <item>@drawable/img_badminton</item>
-        <item>@drawable/img_baseball</item>
-        <item>@drawable/img_basketball</item>
-        <item>@drawable/img_running</item>
-        <item>@drawable/img_soccer</item>
-        <item>@drawable/img_swimming</item>
-    </array>
+    <string-array name="story_image_url">
+        <item>https://www.destinationfemme.com/wp-content/uploads/2018/08/Cool-and-Cute-Instagram-Names.jpg</item>
+        <item>https://i.pinimg.com/236x/84/92/e0/8492e0925afe315bc2c856f1cc0c46c6.jpg</item>
+        <item>https://media1.popsugar-assets.com/files/thumbor/SworD6Z6FnjQV57spUnti5hEqG8/fit-in/1024x1024/filters:format_auto-!!-:strip_icc-!!-/2013/11/15/193/n/4852708/7dcd0f082212bde9_28_Anja_Rubik_bold_eye/i/How-cool-Anja-Rubik-eye-makeup.jpg</item>
+        <item>https://static1.squarespace.com/static/56db7d4a8a65e2210b5c0cb2/t/58841603bf629a055aeade9a/1485051399952/</item>
+        <item>https://i.pinimg.com/236x/fc/ce/35/fcce35c4181f717b91ce53dfc15d35a2--student.jpg</item>
+        <item>https://media1.popsugar-assets.com/files/thumbor/h7cWWK6kPwYzK-xRdTeqgfBMlJo/fit-in/1024x1024/filters:format_auto-!!-:strip_icc-!!-/2014/01/07/926/n/1922398/dfe2f86a0ec7227a_9506ec4c77d811e3bcd9122bfc82a413_8/i/Diddy-looked-cool-while-staying-warm.jpg</item>
+    </string-array>
 </resources>

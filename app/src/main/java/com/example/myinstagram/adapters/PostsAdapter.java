@@ -16,6 +16,8 @@ import com.example.myinstagram.models.Post;
 
 import java.util.List;
 
+import io.realm.Realm;
+
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHolder> {
 
     private static final int VIEW_TYPE_STORY = 1;
@@ -50,9 +52,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder postViewHolder, int i) {
-        int adapterPosition = postViewHolder.getAdapterPosition();
         if(postViewHolder.getItemViewType() == VIEW_TYPE_POST  && !this.postsData.isEmpty()) {
             Post currentPost;
+            int adapterPosition = postViewHolder.getAdapterPosition();
             if(adapterPosition < STORY_POSITION) {
                 currentPost = this.postsData.get(adapterPosition);
             } else {
@@ -91,9 +93,26 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
             if(postCardBinding != null) {
                 postCardBinding.setPost(currentPost);
                 postCardBinding.likeIcon
-                        .setOnClickListener(v -> homeFragment.onLikeIconClick(postCardBinding, currentPost));
+                        .setOnClickListener(v -> updateLikeCountAndIcon(currentPost, postCardBinding));
             }
+        }
 
+        private void updateLikeCountAndIcon(Post clickedPost, PostCardBinding postCardBinding) {
+            if(clickedPost.isLikeStatus()) {
+                clickedPost.setLikeStatus(false);
+                clickedPost.setLikes(clickedPost.getLikes() - 1);
+            } else {
+                clickedPost.setLikeStatus(true);
+                clickedPost.setLikes(clickedPost.getLikes() + 1);
+            }
+            postCardBinding.setPost(clickedPost);
+            updateDatabase(clickedPost);
+        }
+
+        private void updateDatabase(Post clickedPost) {
+            Realm realmDefaultInstance = Realm.getDefaultInstance();
+            realmDefaultInstance.executeTransaction(realm -> realm.insertOrUpdate(clickedPost));
+            realmDefaultInstance.close();
         }
     }
 }

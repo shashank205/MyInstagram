@@ -19,7 +19,6 @@ import com.example.myinstagram.R;
 import com.example.myinstagram.adapters.PostsAdapter;
 import com.example.myinstagram.adapters.StoriesAdapter;
 import com.example.myinstagram.databinding.FragmentHomeBinding;
-import com.example.myinstagram.databinding.PostCardBinding;
 import com.example.myinstagram.databinding.StoryRecylerCardBinding;
 import com.example.myinstagram.interfaces.HTTPClient;
 import com.example.myinstagram.interfaces.HttpCallBack;
@@ -59,10 +58,6 @@ public class HomeFragment extends Fragment {
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
-    }
-
-    public HomeFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -112,50 +107,6 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    HttpCallBack httpCallBack = new HttpCallBack() {
-
-        @Override
-        public void onFailure(Response response, Throwable throwable, String message) {
-            if(throwable != null) {
-                Log.e(TAG, message, throwable);
-            }
-        }
-
-        @Override
-        public void onSuccess(ResponseBody responseBody) {
-            try {
-                String apiResponse = responseBody.string();
-                Gson gson = new Gson();
-                PostJSONMapper postJSONMapper = gson.fromJson(apiResponse, PostJSONMapper.class);
-                savePostsInDatabase(postJSONMapper.getPosts());
-                sharedPreferencesStorage.writeValue(TIME_STAMP_KEY, postJSONMapper.getTimestamp());
-            } catch (IOException e) {
-                Log.e(TAG, "ResponseBody to String conversion failed : ", e);
-            }
-        }
-
-        private void savePostsInDatabase(List<Post> postsToSave) {
-            int count = context.getResources().getInteger(R.integer.posts_to_display);
-            Realm realmDefaultInstance = Realm.getDefaultInstance();
-            realmDefaultInstance.beginTransaction();
-            RealmList<Post> postRealmList = new RealmList<>();
-            int i = 0;
-            for(Post post: postsToSave) {
-                postsData.add(post);
-                if(++i == count)
-                    break;
-            }
-            postRealmList.addAll(postsData);
-            realmDefaultInstance.insertOrUpdate(postRealmList);
-            realmDefaultInstance.commitTransaction();
-            realmDefaultInstance.close();
-
-            if(getActivity() != null) {
-                getActivity().runOnUiThread(() -> postsAdapter.notifyDataSetChanged());
-            }
-        }
-    };
-
     private void fetchPostsFromServer() {
         final String POSTS_GET_URL = "https://jsonblob.com/api/jsonblob/4074c5dc-2dd1-11e9-8c29-6d3427129fcf";
         ConnectivityManager connectivityManager = null;
@@ -180,6 +131,50 @@ public class HomeFragment extends Fragment {
         this.postsAdapter.notifyDataSetChanged();
     }
 
+
+    HttpCallBack httpCallBack = new HttpCallBack() {
+        @Override
+        public void onFailure(Response response, Throwable throwable, String message) {
+            if(throwable != null) {
+                Log.e(TAG, message, throwable);
+            }
+        }
+
+        @Override
+        public void onSuccess(ResponseBody responseBody) {
+            try {
+                String apiResponse = responseBody.string();
+                Gson gson = new Gson();
+                PostJSONMapper postJSONMapper = gson.fromJson(apiResponse, PostJSONMapper.class);
+                savePostsInDatabase(postJSONMapper.getPosts());
+                sharedPreferencesStorage.writeValue(TIME_STAMP_KEY, postJSONMapper.getTimestamp());
+            } catch (IOException e) {
+                Log.e(TAG, "ResponseBody to String conversion failed : ", e);
+            }
+        }
+
+        private void savePostsInDatabase(List<Post> postsToSave) {
+            Realm realmDefaultInstance = Realm.getDefaultInstance();
+            realmDefaultInstance.beginTransaction();
+            RealmList<Post> postRealmList = new RealmList<>();
+            int count = context.getResources().getInteger(R.integer.posts_to_display);
+            int i = 0;
+            for(Post post: postsToSave) {
+                postsData.add(post);
+                if(++i == count)
+                    break;
+            }
+            postRealmList.addAll(postsData);
+            realmDefaultInstance.insertOrUpdate(postRealmList);
+            realmDefaultInstance.commitTransaction();
+            realmDefaultInstance.close();
+
+            if(getActivity() != null) {
+                getActivity().runOnUiThread(() -> postsAdapter.notifyDataSetChanged());
+            }
+        }
+    };
+
     public void createStoryRecyclerInPostRecycler(StoryRecylerCardBinding storyRecylerCardBinding) {
         storyRecylerCardBinding.storyRecyclerCard.setLayoutManager(
                 new LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false));
@@ -197,22 +192,5 @@ public class HomeFragment extends Fragment {
             this.storiesData.add(new Story(userName[i], imageURLs[i]));
         }
         this.storiesAdapter.notifyDataSetChanged();
-    }
-
-    public void onLikeIconClick(PostCardBinding postCardBinding, Post postClicked) {
-        if(postClicked.isLikeStatus()) {
-            postClicked.setLikeStatus(false);
-            postClicked.setLikes(postClicked.getLikes() - 1);
-        } else {
-            postClicked.setLikeStatus(true);
-            postClicked.setLikes(postClicked.getLikes() + 1);
-        }
-        postCardBinding.setPost(postClicked);
-
-        Realm realmDefaultInstance = Realm.getDefaultInstance();
-        realmDefaultInstance.executeTransaction(realm -> realm.insertOrUpdate(postClicked));
-        realmDefaultInstance.close();
-
-        this.postsAdapter.notifyDataSetChanged();
     }
 }

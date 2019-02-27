@@ -197,32 +197,19 @@ public class HomeFragment extends Fragment implements HttpCallBack {
     }
 
     public void onLikeIconClick(PostCardBinding postCardBinding, Post postClicked) {
-        Realm realmDefaultInstance = Realm.getDefaultInstance();
-        realmDefaultInstance.executeTransaction(realm -> {
-            if(postClicked.isLikeStatus()) {
-                postClicked.setLikeStatus(false);
-                postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_border_black_18);
-                postClicked.setLikes(postClicked.getLikes() - 1);
-                updateLikeCount(postCardBinding, postClicked.getLikes());
-            } else {
-                postClicked.setLikeStatus(true);
-                postCardBinding.likeIcon.setBackgroundResource(R.drawable.baseline_favorite_black_18);
-                postClicked.setLikes(postClicked.getLikes() + 1);
-                updateLikeCount(postCardBinding, postClicked.getLikes());
-            }
-            realm.insertOrUpdate(postClicked);
-        });
-        realmDefaultInstance.close();
-        this.postsAdapter.notifyDataSetChanged();
-    }
-
-    private void updateLikeCount(PostCardBinding postCardBinding, int likeCount) {
-        if(likeCount == 0) {
-            postCardBinding.likes.setVisibility(View.GONE);
+        if(postClicked.isLikeStatus()) {
+            postClicked.setLikeStatus(false);
+            postClicked.setLikes(postClicked.getLikes() - 1);
         } else {
-            postCardBinding.likes.setVisibility(View.VISIBLE);
-            postCardBinding.likes.setText(context.getResources()
-                    .getQuantityString(R.plurals.like, likeCount, likeCount));
+            postClicked.setLikeStatus(true);
+            postClicked.setLikes(postClicked.getLikes() + 1);
         }
+        postCardBinding.setPost(postClicked);
+
+        Realm realmDefaultInstance = Realm.getDefaultInstance();
+        realmDefaultInstance.executeTransaction(realm -> realm.insertOrUpdate(postClicked));
+        realmDefaultInstance.close();
+
+        this.postsAdapter.notifyDataSetChanged();
     }
 }

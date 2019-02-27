@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+    <data>
+        <import type="com.example.myinstagram.models.PostBindingUtil" />
+        <import type="android.view.View"/>
+        <variable
+            name="post"
+            type="com.example.myinstagram.models.Post" />
+        <variable
+            name="homeFragment"
+            type="com.example.myinstagram.fragments.HomeFragment" />
+    </data>
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,6 +24,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:contentDescription="@string/avatar_url"
+            app:avatarUrl="@{post.user.avatarUrl}"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -24,9 +35,10 @@
             android:layout_height="16dp"
             android:layout_marginStart="72dp"
             android:layout_marginLeft="72dp"
-            android:layout_marginTop="14dp"
+            app:topMargin="@{post.location}"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
+            android:text="@{post.user.name}"
             android:textIsSelectable="true"
             android:textSize="16sp"
             app:layout_constraintTop_toTopOf="parent" />
@@ -40,6 +52,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="14dp"
+            android:text="@{post.location}"
             android:textIsSelectable="true"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@id/imageUrl" />
@@ -52,6 +65,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/post_image_description"
             android:scaleType="fitXY"
+            app:imageUrl="@{post.imageUrl}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/avatarUrl" />
@@ -64,7 +78,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/post_like_icon"
-            android:src="@drawable/baseline_favorite_border_black_18"
+            app:likeIcon="@{post.likeStatus}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageUrl" />
 
@@ -113,6 +127,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
+            android:text="@{@plurals/like(post.likes, post.likes)}"
+            android:visibility="@{post.likes != 0 ? View.VISIBLE : View.GONE}"
             android:textIsSelectable="true"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -128,6 +144,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
+            android:text="@{post.caption}"
             android:textIsSelectable="true"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -143,6 +160,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
+            android:text="@{@plurals/comment(post.comments, post.comments)}"
+            android:visibility="@{post.comments != 0 ? View.VISIBLE : View.GONE}"
             android:textIsSelectable="true"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"

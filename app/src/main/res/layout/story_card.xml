@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="story"
+            type="com.example.myinstagram.models.Story" />
+    </data>
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
@@ -18,6 +23,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
+                app:glideUrl="@{story.imageURL}"
                 android:contentDescription="@string/story_image_descrption"/>
 
             <TextView
@@ -27,7 +33,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_below="@id/storyContent"/>
+                android:text="@{story.user.name}" />
 
         </LinearLayout>
 

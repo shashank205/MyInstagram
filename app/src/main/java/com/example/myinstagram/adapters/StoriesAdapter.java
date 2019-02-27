@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
 import com.example.myinstagram.R;
 import com.example.myinstagram.databinding.StoryCardBinding;
 import com.example.myinstagram.models.Story;
@@ -33,7 +32,8 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
 
     @Override
     public void onBindViewHolder(@NonNull StoryViewHolder storyViewHolder, int i) {
-        Story currentStory = this.storiesData.get(i);
+        int adapterPosition = storyViewHolder.getAdapterPosition();
+        Story currentStory = this.storiesData.get(adapterPosition);
         storyViewHolder.populate(currentStory);
     }
 
@@ -52,8 +52,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<StoriesAdapter.StoryVie
         }
 
         private void populate(Story currentStory) {
-            Glide.with(context).load(currentStory.getImageURL()).into(this.storyCardBinding.storyContent);
-            this.storyCardBinding.storyUserName.setText(currentStory.getUser().getName());
+            this.storyCardBinding.setStory(currentStory);
         }
     }
 }

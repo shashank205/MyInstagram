@@ -9,12 +9,13 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.myinstagram.R;
 
-public class PostBindingUtil {
-    private PostBindingUtil() {
+public class LayoutBindingUtil {
 
+    private LayoutBindingUtil() {
+        //Not called
     }
 
-    @BindingAdapter("imageUrl")
+    @BindingAdapter("glideUrl")
     public static void setImageUrl(ImageView view, String imageUrl) {
         Context context = view.getContext();
         Glide.with(context).load(imageUrl).into(view);
@@ -25,12 +26,6 @@ public class PostBindingUtil {
         if(isLiked)
             view.setBackgroundResource(R.drawable.baseline_favorite_black_18);
         else view.setBackgroundResource(R.drawable.baseline_favorite_border_black_18);
-    }
-
-    @BindingAdapter("avatarUrl")
-    public static void setAvatarUrl(ImageView view, String imageUrl) {
-        Context context = view.getContext();
-        Glide.with(context).load(imageUrl).into(view);
     }
 
     @BindingAdapter("topMargin")

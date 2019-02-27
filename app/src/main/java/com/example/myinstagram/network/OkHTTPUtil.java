@@ -1,7 +1,6 @@
 package com.example.myinstagram.network;
 
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 
 import com.example.myinstagram.interfaces.HttpCallBack;
 import com.example.myinstagram.interfaces.HTTPClient;
@@ -20,9 +19,7 @@ public class OkHTTPUtil implements HTTPClient {
     private final OkHttpClient client = new OkHttpClient();
 
     @Override
-    public void makeHTTPGetRequest(String url, Fragment fragment) {
-
-        HttpCallBack httpCallBack = (HttpCallBack) fragment;
+    public void makeHTTPGetRequest(String url, HttpCallBack httpCallBack) {
 
         Request request = new Request.Builder().url(url).build();
         client.newCall(request).enqueue(new Callback() {

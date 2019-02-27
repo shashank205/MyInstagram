@@ -42,7 +42,7 @@ import io.realm.RealmResults;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class HomeFragment extends Fragment implements HttpCallBack {
+public class HomeFragment extends Fragment {
 
     private static final String TAG = HomeFragment.class.getName();
     private static final String TIME_STAMP_KEY = "timestamp";
@@ -112,6 +112,50 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         }
     }
 
+    HttpCallBack httpCallBack = new HttpCallBack() {
+
+        @Override
+        public void onFailure(Response response, Throwable throwable, String message) {
+            if(throwable != null) {
+                Log.e(TAG, message, throwable);
+            }
+        }
+
+        @Override
+        public void onSuccess(ResponseBody responseBody) {
+            try {
+                String apiResponse = responseBody.string();
+                Gson gson = new Gson();
+                PostJSONMapper postJSONMapper = gson.fromJson(apiResponse, PostJSONMapper.class);
+                savePostsInDatabase(postJSONMapper.getPosts());
+                sharedPreferencesStorage.writeValue(TIME_STAMP_KEY, postJSONMapper.getTimestamp());
+            } catch (IOException e) {
+                Log.e(TAG, "ResponseBody to String conversion failed : ", e);
+            }
+        }
+
+        private void savePostsInDatabase(List<Post> postsToSave) {
+            int count = context.getResources().getInteger(R.integer.posts_to_display);
+            Realm realmDefaultInstance = Realm.getDefaultInstance();
+            realmDefaultInstance.beginTransaction();
+            RealmList<Post> postRealmList = new RealmList<>();
+            int i = 0;
+            for(Post post: postsToSave) {
+                postsData.add(post);
+                if(++i == count)
+                    break;
+            }
+            postRealmList.addAll(postsData);
+            realmDefaultInstance.insertOrUpdate(postRealmList);
+            realmDefaultInstance.commitTransaction();
+            realmDefaultInstance.close();
+
+            if(getActivity() != null) {
+                getActivity().runOnUiThread(() -> postsAdapter.notifyDataSetChanged());
+            }
+        }
+    };
+
     private void fetchPostsFromServer() {
         final String POSTS_GET_URL = "https://jsonblob.com/api/jsonblob/4074c5dc-2dd1-11e9-8c29-6d3427129fcf";
         ConnectivityManager connectivityManager = null;
@@ -122,7 +166,7 @@ public class HomeFragment extends Fragment implements HttpCallBack {
             networkInfo = connectivityManager.getActiveNetworkInfo();
         }
         if (networkInfo != null && networkInfo.isConnected()) {
-            httpClient.makeHTTPGetRequest(POSTS_GET_URL, this);
+            httpClient.makeHTTPGetRequest(POSTS_GET_URL, httpCallBack);
         }
     }
 
@@ -134,47 +178,6 @@ public class HomeFragment extends Fragment implements HttpCallBack {
         this.postsData.addAll(unManagedPosts);
         realmDefaultInstance.close();
         this.postsAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onFailure(Response response, Throwable throwable, String message) {
-        if(throwable != null) {
-            Log.e(TAG, message, throwable);
-        }
-    }
-
-    @Override
-    public void onSuccess(ResponseBody responseBody) {
-        try {
-            String apiResponse = responseBody.string();
-            Gson gson = new Gson();
-            PostJSONMapper postJSONMapper = gson.fromJson(apiResponse, PostJSONMapper.class);
-            savePostsInDatabase(postJSONMapper.getPosts());
-            this.sharedPreferencesStorage.writeValue(TIME_STAMP_KEY, postJSONMapper.getTimestamp());
-        } catch (IOException e) {
-            Log.e(TAG, "ResponseBody to String conversion failed : ", e);
-        }
-    }
-
-    private void savePostsInDatabase(List<Post> postsToSave) {
-        int count = this.context.getResources().getInteger(R.integer.posts_to_display);
-        Realm realmDefaultInstance = Realm.getDefaultInstance();
-        realmDefaultInstance.beginTransaction();
-        RealmList<Post> postRealmList = new RealmList<>();
-        int i = 0;
-        for(Post post: postsToSave) {
-            this.postsData.add(post);
-            if(++i == count)
-                break;
-        }
-        postRealmList.addAll(this.postsData);
-        realmDefaultInstance.insertOrUpdate(postRealmList);
-        realmDefaultInstance.commitTransaction();
-        realmDefaultInstance.close();
-
-        if(getActivity() != null) {
-            getActivity().runOnUiThread(() -> this.postsAdapter.notifyDataSetChanged());
-        }
     }
 
     public void createStoryRecyclerInPostRecycler(StoryRecylerCardBinding storyRecylerCardBinding) {

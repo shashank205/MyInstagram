@@ -7,7 +7,8 @@ import dagger.Binds;
 import dagger.Module;
 
 @Module
-interface AppModule {
+interface ContextModule {
+
     @Binds
     Context provideContext(Application application);
 }

@@ -67,13 +67,13 @@ public class HomeFragment extends Fragment implements HttpCallBack {
 
     @Override
     public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
         super.onAttach(context);
         this.context = context;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState);
         this.postsData = new ArrayList<>();
         this.storiesData = new ArrayList<>();
